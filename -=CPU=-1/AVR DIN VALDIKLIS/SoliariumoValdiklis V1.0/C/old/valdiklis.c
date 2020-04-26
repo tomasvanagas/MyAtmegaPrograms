@@ -1,0 +1,557 @@
+/*****************************************************
+Project     : Soliariumo valdiklis V1.0
+Date        : 2012.06.11
+Author      : Tomas Vanagas
+Chip type   : ATmega32
+*****************************************************/
+
+#include <mega128.h>
+#include <delay.h>
+
+// DS1307 Real Time Clock functions
+//#include <ds1307.h>
+
+// PINS
+#define BUTTON_UP 0
+#define BUTTON_LEFT 1
+#define BUTTON_ENTER 2
+#define BUTTON_RIGHT 3
+#define BUTTON_DOWN 4
+
+unsigned char OUTPUT(unsigned char address, unsigned char value){
+    if(address==17){
+//    PORTC.3 = value;
+//    return 1;
+    }
+    else if(address==18){
+//    PORTC.4 = value;
+//    return 1;
+    }
+    else if(address==19){
+//    PORTC.5 = value;
+//    return 1;
+    }
+    else if(address==20){
+//    PORTD.5 = value;
+//    return 1;
+    }
+    else if(address==21){
+//    PORTD.4 = value;
+//    return 1;
+    }
+    else if(address==22){
+//    PORTD.7 = value;
+//    return 1;
+    }
+return 0;
+}
+
+unsigned char BUTTON_INPUT(unsigned char input){
+    if(input==0){   return PING.1;  }
+    if(input==1){   return PING.0;  }
+    if(input==2){   return PINC.0;  }
+    if(input==3){   return PINC.1;  }
+    if(input==4){   return PINC.2;  }
+return 0;
+}
+
+// Real Time
+//unsigned char RealTimeYear, RealTimeMonth, RealTimeDay, RealTimeHour, RealTimeMinute, RealTimeWeekDay, RealTimeSecond;
+//eeprom unsigned char SUMMER_TIME_TURNED_ON;
+//eeprom unsigned char IS_CLOCK_SUMMER;
+
+//eeprom signed char RealTimePrecisioningValue;
+//unsigned char IsRealTimePrecisioned;
+
+
+
+// Code
+//eeprom unsigned int  CODE;
+//eeprom unsigned char IS_LOCK_TURNED_ON;
+
+
+// Neveiklumo taimeriai
+unsigned int STAND_BY_TIMER;
+unsigned char MAIN_MENU_TIMER,LCD_LED_TIMER;
+
+
+
+
+// Other
+char RefreshTime;
+
+//////////// Mygtukai /////////////
+#define ButtonFiltrationTimer 20 // x*cycle (cycle~1ms)
+///////////////////////////////////
+
+//-----------------------------------------------------------------------------------//
+//--------------------------------- Lcd System --------------------------------------//
+//-----------------------------------------------------------------------------------//
+#define LCD_LED PORTA.7
+
+static unsigned char RowsOnWindow;
+static unsigned char Address[6];
+static unsigned char SelectedRow;
+static unsigned char RefreshLcd;
+static unsigned char lcd_light_osc;
+static unsigned char lcd_light_now;
+eeprom unsigned char lcd_light;
+
+#asm
+   .equ __lcd_port=0x18 ;PORTB
+#endasm
+#include <lcd.h>
+
+// Ekrano apsvietimas
+interrupt [TIM0_OVF] void timer0_ovf_isr(void){
+lcd_light_osc += 1;
+    if(lcd_light_osc>=100){
+    lcd_light_osc = 0;
+    }
+
+    if(lcd_light_now>lcd_light_osc){
+    LCD_LED = 1;
+    }
+    else{
+    LCD_LED = 0;
+    }
+}
+
+char SelectAnotherRow(char up_down){
+// 0 - down
+// 1 - up
+    if(up_down==0){
+        if(SelectedRow<RowsOnWindow-1){
+        SelectedRow++;
+            if(Address[5]+3<SelectedRow){
+            Address[5] = SelectedRow - 3;
+            }
+        return 1;
+        }
+    }
+    else{
+        if(SelectedRow>0){
+        SelectedRow--;
+            if(Address[5]>SelectedRow){
+            Address[5] = SelectedRow;
+            }
+        return 1;
+        }
+    }
+return 0;
+}
+
+char NumToIndex(char Num){
+    if(Num==0){     return '0';}
+    else if(Num==1){return '1';}
+    else if(Num==2){return '2';}
+    else if(Num==3){return '3';}
+    else if(Num==4){return '4';}
+    else if(Num==5){return '5';}
+    else if(Num==6){return '6';}
+    else if(Num==7){return '7';}
+    else if(Num==8){return '8';}
+    else if(Num==9){return '9';}
+    else{           return '-';}
+return 0;
+}
+
+char lcd_put_number(char Type, char Lenght, char IsSign,
+
+                    char NumbersAfterDot,
+
+                    unsigned long int Number0,
+                    signed long int Number1){
+    if(Lenght>0){
+    unsigned long int k = 1;
+    unsigned char i;
+        for(i=0;i<Lenght-1;i++) k = k*10;
+
+        if(Type==0){
+        unsigned long int a;
+        unsigned char b;
+        a = Number0;
+
+            if(IsSign==1){
+            lcd_putchar('+');
+            }
+
+            if(a<0){
+            a = a*(-1);
+            }
+
+            if(k*10<a){
+            a = k*10 - 1;
+            }
+
+            for(i=0;i<Lenght;i++){
+                if(NumbersAfterDot!=0){
+                    if(Lenght-NumbersAfterDot==i){
+                    lcd_putchar('.');
+                    }
+                }
+            b = a/k;
+            lcd_putchar( NumToIndex( b ) );
+            a = a - b*k;
+            k = k/10;
+            }
+        return 1;
+        }
+
+        else if(Type==1){
+        signed long int a;
+        unsigned char b;
+        a = Number1;
+
+            if(IsSign==1){
+                if(a>=0){
+                lcd_putchar('+');
+                }
+                else{
+                lcd_putchar('-');
+                }
+            }
+
+            if(a<0){
+            a = a*(-1);
+            }
+
+            if(k*10<a){
+            a = k*10 - 1;
+            }
+
+            for(i=0;i<Lenght;i++){
+                if(NumbersAfterDot!=0){
+                    if(Lenght-NumbersAfterDot==i){
+                    lcd_putchar('.');
+                    }
+                }
+            b = a/k;
+            lcd_putchar( NumToIndex( b ) );
+            a = a - b*k;
+            k = k/10;
+            }
+        return 1;
+        }
+    }
+return 0;
+}
+
+//-----------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------//
+
+
+
+
+
+
+
+
+
+
+
+void main(void){
+// Declare your local variables here
+
+// Input/Output Ports initialization
+// Port A initialization
+// Func7=Out Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTA=0b00000000;
+DDRA= 0b10000000;
+
+// Port B initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTB=0b00000000;
+DDRB= 0b00000000;
+
+// Port C initialization
+// Func7=In Func6=In Func5=Out Func4=Out Func3=Out Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTC=0b00000000;
+DDRC= 0b00111000;
+
+// Port D initialization
+// Func7=Out Func6=In Func5=Out Func4=Out Func3=In Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTD=0b00000000;
+DDRD= 0b10110000;
+
+// Port E initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTE=0b00000000;
+DDRE= 0b00000000;
+
+// Port F initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T
+PORTF=0b00000000;
+DDRF= 0b00000000;
+
+// Port G initialization
+// Func3=In Func2=In Func1=In Func0=In
+// State3=T State2=T State1=T State0=T
+PORTG=0b0000;
+DDRG= 0b0000;
+
+/// Timer/Counter 0 initialization
+// Clock source: System Clock
+// Clock value: 1000.000 kHz
+// Mode: Normal top=FFh
+// OC0 output: Disconnected
+TCCR0=0x02;
+TCNT0=0x00;
+OCR0=0x00;
+
+// Timer/Counter 1 initialization
+// Clock source: System Clock
+// Clock value: Timer1 Stopped
+// Mode: Normal top=FFFFh
+// OC1A output: Discon.
+// OC1B output: Discon.
+// Noise Canceler: Off
+// Input Capture on Falling Edge
+// Timer1 Overflow Interrupt: Off
+// Input Capture Interrupt: Off
+// Compare A Match Interrupt: Off
+// Compare B Match Interrupt: Off
+TCCR1A=0x00;
+TCCR1B=0x00;
+TCNT1H=0x00;
+TCNT1L=0x00;
+ICR1H=0x00;
+ICR1L=0x00;
+OCR1AH=0x00;
+OCR1AL=0x00;
+OCR1BH=0x00;
+OCR1BL=0x00;
+
+// Timer/Counter 2 initialization
+// Clock source: System Clock
+// Clock value: Timer2 Stopped
+// Mode: Normal top=FFh
+// OC2 output: Disconnected
+ASSR=0x00;
+TCCR2=0x00;
+TCNT2=0x00;
+OCR2=0x00;
+
+// External Interrupt(s) initialization
+// INT0: Off
+// INT1: Off
+// INT2: Off
+MCUCR=0x00;
+MCUCSR=0x00;
+
+// Timer(s)/Counter(s) Interrupt(s) initialization
+TIMSK=0x01;
+
+// Analog Comparator initialization
+// Analog Comparator: Off
+// Analog Comparator Input Capture by Timer/Counter 1: Off
+ACSR=0x80;
+SFIOR=0x00;
+
+// I2C Bus initialization
+//i2c_init();
+
+// DS1307 Real Time Clock initialization
+// Square wave output on pin SQW/OUT: Off
+// SQW/OUT pin state: 0
+//rtc_init(0,0,0);
+
+// Global enable interrupts
+#asm("sei")
+
+
+// 2 Wire Bus initialization
+// Generate Acknowledge Pulse: Off
+// 2 Wire Bus Slave Address: 0h
+// General Call Recognition: Off
+// Bit Rate: 400.000 kHz
+//TWSR=0x00;
+//TWBR=0x02;
+//TWAR=0x00;
+//TWCR=0x04;
+
+// I2C Bus initialization
+//i2c_init();
+
+// DS1307 Real Time Clock initialization
+// Square wave output on pin SQW/OUT: Off
+// SQW/OUT pin state: 0
+//rtc_init(0,0,0);
+
+// LCD module initialization
+lcd_init(20);
+
+// Watchdog Timer initialization
+// Watchdog Timer Prescaler: OSC/128k
+WDTCR=0x0B;
+
+LCD_LED_TIMER = 30; lcd_light_now = lcd_light;
+lcd_putsf("+------------------+");
+lcd_putsf("| SOLIAR. AUSINIMO |");
+lcd_putsf("| VALDIKLIS V1.");
+lcd_put_number(0,3,0,0,__BUILD__,0);
+lcd_putsf(" |+------------------+");
+delay_ms(1500);
+
+// Default values
+    if(lcd_light>100){lcd_light = 100;}
+
+    while(1){
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////// Funkcija kas 1 secunde //////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    static unsigned int SecondCounter;
+    SecondCounter++;
+        if(SecondCounter>=500){
+        SecondCounter = 0;
+        RefreshTime++;
+        }
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////// Mygtukai /////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    static unsigned char BUTTON[5], ButtonFilter[5];
+        if(1){
+        unsigned char i;
+            for(i=0;i<5;i++){
+                if(BUTTON_INPUT(i)==1){
+                    if(ButtonFilter[i]<ButtonFiltrationTimer){
+                    ButtonFilter[i]++;
+                    }
+                }
+                else{
+                    if(ButtonFilter[i]>=ButtonFiltrationTimer){
+                    BUTTON[i] = 1;
+                    RefreshLcd = RefreshLcd + 2;
+                    STAND_BY_TIMER = 45;
+                    MAIN_MENU_TIMER = 30;
+                    LCD_LED_TIMER = 15; lcd_light_now = lcd_light;
+                    }
+                    else{
+                    BUTTON[i] = 0;
+                    }
+                ButtonFilter[i] = 0;
+                }
+            }
+        }
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////// LCD ////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    // Lcd led
+    static unsigned char lcd_led_counter;
+        if(LCD_LED_TIMER==0){
+            if(lcd_light_now>0){
+            lcd_led_counter++;
+                if(lcd_led_counter>=25){
+                lcd_led_counter = 0;
+                lcd_light_now--;
+                }
+            }
+        }
+
+
+
+
+        if(RefreshLcd>=1){
+        lcd_clear();
+        }
+
+        // Pagrindinis langas
+        if(Address[0]==0){
+            if(BUTTON[BUTTON_DOWN]==1){
+            SelectAnotherRow(0);
+            }
+            else if(BUTTON[BUTTON_UP]==1){
+            SelectAnotherRow(1);
+            }
+            else if(BUTTON[BUTTON_ENTER]==1){
+            Address[0] = SelectedRow;
+            SelectedRow = 0;
+            Address[5] = 0;
+            }
+
+            if(RefreshLcd>=1){
+            lcd_putsf("  -=PAGR. MENIU=-   ");
+            lcd_putsf("VIDAUS TEMP.+22.5C <");
+
+
+
+            lcd_putsf("UZSTATYTA T.+22.0C  ");
+
+
+
+            lcd_putsf("NUSTATYMAI");
+            lcd_gotoxy(19,SelectedRow-Address[5]);
+            lcd_putchar('<');
+            }
+        }
+        else if(Address[0]==1){
+            if(BUTTON[BUTTON_DOWN]==1){
+            SelectAnotherRow(0);
+            }
+            else if(BUTTON[BUTTON_UP]==1){
+            SelectAnotherRow(1);
+            }
+            else if(BUTTON[BUTTON_ENTER]==1){
+            Address[0] = SelectedRow;
+            SelectedRow = 0;
+            Address[5] = 0;
+            }
+
+            if(RefreshLcd>=1){
+            lcd_putsf("-=VIDIN.TERMOMETR.=-");
+            lcd_putsf("VIDAUS TEMP.+22.5C <");
+            lcd_putsf("PADERINIMAS: +0.0C  ");
+            lcd_putsf("ADRESAS: 012345678  ");
+            lcd_gotoxy(19,SelectedRow-Address[5]);
+            lcd_putchar('<');
+            }
+        }
+        else if(Address[0]==2){
+            if(BUTTON[BUTTON_DOWN]==1){
+            SelectAnotherRow(0);
+            }
+            else if(BUTTON[BUTTON_UP]==1){
+            SelectAnotherRow(1);
+            }
+            else if(BUTTON[BUTTON_ENTER]==1){
+            Address[0] = SelectedRow;
+            SelectedRow = 0;
+            Address[5] = 0;
+            }
+
+            if(RefreshLcd>=1){
+            lcd_putsf("-=UZSTATY.=-");
+            lcd_putsf("VIDAUS TEMP.+22.5C <");
+            lcd_putsf("PADERINIMAS: +0.0C  ");
+            lcd_putsf("ADRESAS: 012345678  ");
+            lcd_gotoxy(19,SelectedRow-Address[5]);
+            lcd_putchar('<');
+            }
+        }
+
+        if(RefreshLcd>=1){
+        RefreshLcd--;
+        }
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+    delay_ms(1);
+    }
+}

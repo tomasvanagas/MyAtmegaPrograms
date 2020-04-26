@@ -1,0 +1,30 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+RowsOnWindow                                                      0500h        1
+Address                                                           0501h        6
+SelectedRow                                                       0507h        1
+RefreshLcd                                                        0508h        1
+lcd_light_osc                                                     0509h        1
+lcd_light_now                                                     050Ah        1
+SecondCounter                                                     050Bh        2
+BUTTON                                                            050Dh        5
+ButtonFilter                                                      0512h        5
+lcd_led_counter                                                   0517h        1
+_base_y                                                           0518h        4
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+lcd_light                                                         0000h        1
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+STAND_BY_TIMER                                                    R4,R5        2
+MAIN_MENU_TIMER                                                   R7           1
+LCD_LED_TIMER                                                     R6           1
+RefreshTime                                                       R9           1
+_lcd_x                                                            R8           1
+_lcd_y                                                            R11          1
+_lcd_maxx                                                         R10          1

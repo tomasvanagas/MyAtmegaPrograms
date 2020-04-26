@@ -1,0 +1,56 @@
+LABCENTER PROTEUS TOOL INFORMATION FILE
+=======================================
+
+In case of difficulty, please e-mail support@labcenter.co.uk
+
+Tool set up for Proteus layout 'CPU Board.LYT'.
+CADCAM generated at 23:38:46 on 2012 m. kovo 11 d..
+
+File List
+---------
+Top Copper              : CPU Board - CADCAM Top Copper.TXT
+Bottom Copper           : CPU Board - CADCAM Bottom Copper.TXT
+Top Silk Screen         : CPU Board - CADCAM Top Silk Screen.TXT
+Bottom Silk Screen      : CPU Board - CADCAM Bottom Silk Screen.TXT
+Top Solder Resist       : CPU Board - CADCAM Top Solder Resist.TXT
+Bottom Solder Resist    : CPU Board - CADCAM Bottom Solder Resist.TXT
+Drill                   : CPU Board - CADCAM Drill.TXT
+
+Photoplotter Setup
+------------------
+Format: RS274X, ASCII, 2.4, imperial, absolute, eob=*, LZO
+Notes:  D=Diameter, S=Side, W=Width, H=Height
+
+D10	CIRCLE	D=50th                                      DRAW
+D11	CIRCLE	D=30th                                      DRAW
+D12	CIRCLE	D=50th                                      FLASH
+D13	CIRCLE	D=80th                                      FLASH
+D14	SQUARE	S=50th                                      FLASH
+D15	CIRCLE	D=40th                                      FLASH
+D16	CIRCLE	D=70th                                      FLASH
+D17	CIRCLE	D=56th                                      FLASH
+D18	CIRCLE	D=8th                                       DRAW
+D19	CIRCLE	D=2.5th                                     DRAW
+D70	CIRCLE	D=70th                                      DRAW
+D71	CIRCLE	D=80th                                      DRAW
+D20	CIRCLE	D=40th                                      DRAW
+D21	CIRCLE	D=100th                                     FLASH
+D22	SMT	W=70th                H=70th                FLASH
+D23	CIRCLE	D=60th                                      FLASH
+D24	CIRCLE	D=90th                                      FLASH
+D25	CIRCLE	D=76th                                      FLASH
+
+NC Drill Setup
+--------------
+Format: ASCII, 2.4, imperial, absolute, eob=<CR><LF>, no zero suppression.
+Notes:  Tool sizes are diameters. Layer sets are in brackets - 0=TOP, 15=BOTTOM, 1-14=INNER.
+
+T01	20th (0-15)
+T02	30th (0-15)
+T03	276th (0-15)
+T04	40th (0-15)
+T05	50th (0-15)
+T06	32th (0-15)
+
+
+[END OF FILE]

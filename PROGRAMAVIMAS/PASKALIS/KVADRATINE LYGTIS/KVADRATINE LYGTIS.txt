@@ -1,0 +1,90 @@
+program Kvadratinis_trinaris;
+var a,b,c,DISKRIMINANTAS,x,x1,x2:real;
+begin
+  WriteLn('<<<<<<<<<<===== ax2 + bx + c = 0 =====>>>>>>>>>>');
+  WriteLn('');
+  WriteLn('Po kiekvieno ivesto skaicius paspausti "ENTER"');
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA a ===>> ');
+  Read(a);
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA b ===>> ');
+  Read(b);
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA c ===>> ');
+  Read(c);
+  WriteLn('');
+
+  DISKRIMINANTAS:=(b*b)-(4*a*c);
+  WriteLn('');
+  WriteLn('                <<<<<<<<<<SPRENDIMAS>>>>>>>>>>');
+  WriteLn('');
+
+  WriteLn('D = (',b:6:2,' * ',b:6:2,') - (4.00 * ',a:6:2,' * ',c:6:2,') = ',DISKRIMINANTAS :6:1);
+  WriteLn('');
+  WriteLn('');
+  if (DISKRIMINANTAS = 0) then
+  x:= -b/(2*a);
+
+  if (DISKRIMINANTAS > 0) then
+  x1:=(-b-Sqrt(DISKRIMINANTAS))/(2*a);
+
+  if (DISKRIMINANTAS > 0) then
+  x2:=(-b+Sqrt(DISKRIMINANTAS))/(2*a);
+
+  if(DISKRIMINANTAS=0) then
+  WriteLn('                   ',-b:6:2);
+
+  if(DISKRIMINANTAS=0) then
+  WriteLn('            x= -------------- == ',x:6:2);
+
+  if(DISKRIMINANTAS=0) then
+  WriteLn('                   2 *',a:6:2);
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('                ', -b:6:2,'-',Sqrt(DISKRIMINANTAS):6:2);
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('           x1= -------------- ==',x1:6:2);
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('                 2*',a:6:2);
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('');
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('');
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('                ',-b:6:2,'+',Sqrt(DISKRIMINANTAS):6:2);
+  if(DISKRIMINANTAS>0) then
+  WriteLn('           x2= -------------- ==',x2:6:2);
+
+  if(DISKRIMINANTAS>0) then
+  WriteLn('                 2 *',a:6:2);
+  WriteLn('');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('+=============================================================+');
+  WriteLn('');
+  if (DISKRIMINANTAS < 0) then
+  WriteLn('                    SPRENDINIU NERA');
+
+  if (DISKRIMINANTAS = 0) then
+  WriteLn('                   ATS:. x =', x:6:1);
+
+  if (DISKRIMINANTAS > 0) then
+  WriteLn('                 1.ATS:. x1 = ', x1:6:2);
+
+  if (DISKRIMINANTAS > 0) then
+  WriteLn('');
+
+  if (DISKRIMINANTAS > 0) then
+  WriteLn('                 2.ATS:. x2 = ', x2:6:2);
+  WriteLn('');
+  WriteLn('+=============================================================+');
+  WriteLn('KVADRATINES LYGTYS v.1.0                                  T.V.');
+  ReadLn;
+  ReadLn;
+  end.

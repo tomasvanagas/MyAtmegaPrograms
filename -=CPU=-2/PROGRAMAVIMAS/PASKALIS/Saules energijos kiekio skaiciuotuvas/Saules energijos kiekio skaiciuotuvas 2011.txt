@@ -1,0 +1,79 @@
+program Saules_energijos_kiekio_skaiciuotuvas;
+var Qmetai, Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,
+m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12, Mmetai,
+d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12:real;
+var a:integer;
+begin
+  WriteLn('        Saules energijos kiekio skaiciuotuvas');
+  WriteLn('');WriteLn('');
+  WriteLn('Saules kolektorius 2.05 m2 ploto.');
+  Write('Pasirinkite saules kolektoriu skaiciu ==> ');
+  Read(a);
+  WriteLn('');
+  WriteLn('+==================+');
+  WriteLn('+===Pagal 2011m.===+');
+  WriteLn('+==================+');
+  Q1:=  2*a; 	//patikrinta ( 20kwh is 9kol.)
+  Q2:=  13*a; 	//patikrinta (120kwh is 9kol.)
+  Q3:=  32*a;	//patikrinta (285kwh is 9kol.)
+  Q4:=  45*a;	//patikrinta (406kwh is 9kol.)
+  Q5:=  52*a;	//patikrinta (467kwh is 9kol.)
+  Q6:=  53*a;	//patikrinta (475kwh is 9kol.)
+  Q7:=  35*a;	//patikrinta (317kwh is 9kol.)
+  Q8:=  34*a;	//patikrinta (304kwh is 9kol.)
+  Q9:=  33*a;	//patikrinta (297kwh is 9kol.)
+  Q10:= 17*a;	//patikrinta (154kwh is 9kol.)
+  Q11:= 4*a;	//patikrinta ( 34kwh is 9kol.)
+  Q12:= 0*a;	//patikrinta (  2kwh is 9kol.)
+  m1:= (Q1*3600000)/10000000;
+  m2:= (Q2*3600000)/10000000;
+  m3:= (Q3*3600000)/10000000;
+  m4:= (Q4*3600000)/10000000;
+  m5:= (Q5*3600000)/10000000;
+  m6:= (Q6*3600000)/10000000;
+  m7:= (Q7*3600000)/10000000;
+  m8:= (Q8*3600000)/10000000;
+  m9:= (Q9*3600000)/10000000;
+  m10:= (Q10*3600000)/10000000;
+  m11:= (Q11*3600000)/10000000;
+  m12:= (Q12*3600000)/10000000;
+  d1:= m1/31;
+  d2:= m2/28;
+  d3:= m3/31;
+  d4:= m4/30;
+  d5:= m5/31;
+  d6:= m6/30;
+  d7:= m7/31;
+  d8:= m8/31;
+  d9:= m9/30;
+  d10:= m10/31;
+  d11:= m11/30;
+  d12:= m12/31;
+  Qmetai:= (Q1+Q2+Q3+Q4+Q5+Q6+Q7+Q8+Q9+Q10+Q11+Q12)/1000;
+  Mmetai:= (m1+m2+m3+m4+m5+m6+m7+m8+m9+m10+m11+m12)/1000;
+
+  WriteLn('+=====================================================================+');
+  WriteLn('');
+  WriteLn('Menuo,      Energijos kiekis,  Deginant sausas malkas,');
+  WriteLn('');
+  WriteLn('Sausis:   ',Q1:6:0,' kWh,          ',m1:6:1,' kg,    ',d1:5:1,' kg/diena.');
+  WriteLn('Vasaris:  ',Q2:6:0,' kWh,          ',m2:6:1,' kg,    ',d2:5:1,' kg/dina.');
+  WriteLn('Kovas:    ',Q3:6:0,' kWh,          ',m3:6:1,' kg,    ',d3:5:1,' kg/diena.');
+  WriteLn('Balandis: ',Q4:6:0,' kWh,          ',m4:6:1,' kg,    ',d4:5:1,' kg/diena.');
+  WriteLn('Geguze:   ',Q5:6:0,' kWh,          ',m5:6:1,' kg,    ',d5:5:1,' kg/diena.');
+  WriteLn('Birzelis: ',Q6:6:0,' kWh,          ',m6:6:1,' kg,    ',d6:5:1,' kg/diena.');
+  WriteLn('Liepa:    ',Q7:6:0,' kWh,          ',m7:6:1,' kg,    ',d7:5:1,' kg/diena.');
+  WriteLn('Rugpjutis:',Q8:6:0,' kWh,          ',m8:6:1,' kg,    ',d8:5:1,' kg/diena.');
+  WriteLn('Rugsejis: ',Q9:6:0,' kWh,          ',m9:6:1,' kg,    ',d9:5:1,' kg/diena.');
+  WriteLn('Spalis:   ',Q10:6:0,' kWh,          ',m10:6:1,' kg,    ',d10:5:1,' kg/diena.');
+  WriteLn('Lapkritis:',Q11:6:0,' kWh,          ',m11:6:1,' kg,    ',d11:5:1,' kg/diena.');
+  WriteLn('Gruodis:  ',Q12:6:0,' kWh,          ',m12:6:1,' kg,    ',d12:5:1,' kg/diena.');
+  WriteLn('');
+  WriteLn('Energijos kiekis per metus:       ',Qmetai:3:2,' MWh,');
+  WriteLn('Sudegintu malku kiekis per metus: ',Mmetai:3:2,' t.');
+  WriteLn('');
+  WriteLn('+=====================================================================+');
+  WriteLn('WWW.KOLEKTORIAI.WEBS.COM');
+  Readln;
+  Readln;
+end.

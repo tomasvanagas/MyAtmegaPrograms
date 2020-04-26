@@ -1,0 +1,21 @@
+program Noname0;
+var b,c,d:real;
+var a:integer;
+    begin
+    WriteLn('<=======================================================>');
+    WriteLn('<============ VIDURKIO SKAICIAVIMO PROGRAMA ============>');
+    WriteLn('<=======================================================>');
+    WriteLn('');
+    a := 1;
+    while(1=1) do
+        begin
+        Write(a);
+        Write('.Irasykite skaiciu:');
+        Read(b);
+        c := c + b;
+        Write('                               Vidurkis:');
+        WriteLn(c/a:3:3);
+        a := a + 1;
+        end;
+    Readln;
+    end.

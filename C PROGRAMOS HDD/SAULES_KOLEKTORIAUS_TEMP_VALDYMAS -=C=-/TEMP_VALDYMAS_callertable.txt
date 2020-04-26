@@ -1,0 +1,6 @@
+main
+	uzlaikymas_1sec
+	INPUTAS
+	resetas_1sec
+		uzlaikymas_1sec
+	OUTPUTAI

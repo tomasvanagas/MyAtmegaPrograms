@@ -1,0 +1,763 @@
+/*****************************************************
+Project : Saules kolektoriaus valdiklis
+Version : v1.0
+Date    : 2011-05-22
+Author  : Tomas
+
+Chip type               : ATmega16
+Program type            : Application
+AVR Core Clock frequency: 8.000000 MHz
+Memory model            : Small
+External RAM size       : 0
+Data Stack size         : 256
+*****************************************************/
+#include <mega16.h>
+
+#include <delay.h>
+
+// Alphanumeric LCD Module functions
+#asm
+   .equ __lcd_port=0x18 ;PORTB
+#endasm
+#include <lcd.h>
+///////////////////////////////////////////////////////////////////////////////////
+////////////////////////// VARIABLES //////////////////////////////////////////////
+// Real Time
+eeprom unsigned int  OneSecondTimer = 487; 
+eeprom unsigned int  RealTimeTimer, RealTimeYear;
+eeprom unsigned char RealTimeMonth, RealTimeDay, RealTimeHour, RealTimeMinute;
+unsigned char RealTimeSecond;
+
+// Logs
+#define LOGS_ENABLED 1
+#define LOG_COUNT 20 
+eeprom unsigned char NewestLog[LOG_COUNT];
+
+eeprom unsigned int  LogYear[LOG_COUNT];
+eeprom unsigned char LogMonth[LOG_COUNT];
+eeprom unsigned char LogDay[LOG_COUNT];
+eeprom unsigned char LogHour[LOG_COUNT];
+eeprom unsigned char LogMinute[LOG_COUNT];
+
+eeprom unsigned char LogType[LOG_COUNT];
+
+eeprom unsigned char LogData1[LOG_COUNT];
+eeprom unsigned char LogData2[LOG_COUNT];
+eeprom unsigned char LogData3[LOG_COUNT];
+eeprom unsigned char LogData4[LOG_COUNT];
+
+// Timers
+unsigned int TurnOnTimer;
+
+// Lcd Address
+char LcdAddress[4];
+char RefreshLcd;
+
+// Solar Colector Parameters
+unsigned char SolarColectorState = -1;
+unsigned int SolarPower;
+unsigned int LAST_SOLAR_INPUT_TEMP, LAST_SOLAR_OUTPUT_TEMP;
+unsigned int BOILER_TEMP, SOLAR_INPUT_TEMP, SOLAR_OUTPUT_TEMP;
+eeprom unsigned int MililitersPerMinute = 5000;
+eeprom unsigned long int SolarColectorWatHours;
+eeprom unsigned int WaterHeatConstant = 8621;
+eeprom unsigned int MinimumAntifreezeTemp = 350;
+eeprom unsigned int DifferenceBoilerAndSolar = 100;
+char ANTIFREEZE_PUMP;
+char WATER_PUMP;
+char Acceleration;
+
+// Buttons
+char BUTTON[5], ButtonFilter[5];
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+#define ADC_VREF_TYPE 0x00
+// Read the AD conversion result
+unsigned int read_adc(unsigned char adc_input){
+ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
+// Delay needed for the stabilization of the ADC input voltage
+delay_us(10);
+// Start the AD conversion
+ADCSRA|=0x40;
+// Wait for the AD conversion to complete
+while ((ADCSRA & 0x10)==0);
+ADCSRA|=0x10;
+return ADCW;
+}
+///////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// FUNCTIONS //////////////////////////////////////////
+void UpdateTime(){
+    if(RealTimeSecond==59){
+    RealTimeSecond = 0;
+        if(RealTimeMinute==59){
+        RealTimeMinute = 0;
+            if(RealTimeHour==23){
+            RealTimeHour = 0;
+                                           
+                if((RealTimeMonth==1)||(RealTimeMonth==3)||(RealTimeMonth==5)||
+                (RealTimeMonth==7)||(RealTimeMonth==9)||(RealTimeMonth==11)){
+                    if(RealTimeDay==31){
+                    RealTimeDay = 0;
+                    RealTimeMonth++;
+                    }
+                    else{
+                    RealTimeDay++;
+                    }    
+                }
+                else if((RealTimeMonth==4)||(RealTimeMonth==6)||(RealTimeMonth==8)||
+                (RealTimeMonth==10)){
+                    if(RealTimeDay==30){
+                    RealTimeDay = 0;
+                    RealTimeMonth++;
+                    }
+                    else{
+                    RealTimeDay++;
+                    }
+                }
+                else if(RealTimeMonth==12){
+                    if(RealTimeDay==30){
+                    RealTimeDay = 0;
+                    RealTimeMonth = 0;
+                    RealTimeYear++;
+                    }
+                    else{
+                    RealTimeDay++;
+                    }
+                }
+                else if(RealTimeMonth==2){
+                unsigned int a;
+                a = RealTimeYear/4;
+                a = a*4;
+                    if(a==RealTimeYear){
+                        if(RealTimeDay==29){  
+                        RealTimeDay = 0;
+                        RealTimeMonth++;
+                        }
+                        else{
+                        RealTimeDay++;
+                        }
+                    }
+                    else{
+                        if(RealTimeDay==28){  
+                        RealTimeDay = 0;
+                        RealTimeMonth++;
+                        }
+                        else{
+                        RealTimeDay++;
+                        }
+                    }
+                }
+                         
+            }
+            else{
+            RealTimeHour++;
+            }
+        }
+        else{
+        RealTimeMinute++;
+        }
+    }
+    else{
+    RealTimeSecond++;
+    }
+}
+
+void CalculateJobAndPower(){
+int InputTemperature = (LAST_SOLAR_INPUT_TEMP+SOLAR_INPUT_TEMP)/2;
+int OutputTemperature = (LAST_SOLAR_OUTPUT_TEMP+SOLAR_OUTPUT_TEMP)/2;;
+
+int TemperatureDifference = OutputTemperature - InputTemperature;
+
+unsigned int Job;
+    if(TemperatureDifference>0){
+    Job = (MililitersPerMinute*TemperatureDifference)/WaterHeatConstant;
+    SolarColectorWatHours = SolarColectorWatHours + Job;
+    SolarPower = Job*120; 
+    }
+    else{
+    SolarPower = 0;
+    }
+}
+
+void CheckPumps(){
+    if(SOLAR_OUTPUT_TEMP>=DifferenceBoilerAndSolar+BOILER_TEMP){
+    WATER_PUMP = 1;
+    Acceleration = 5;
+    }
+    else{
+    WATER_PUMP = 0;
+    }
+
+    if(Acceleration>=5){
+        if(SOLAR_OUTPUT_TEMP>=MinimumAntifreezeTemp){
+        ANTIFREEZE_PUMP = 1;
+        }
+    }
+    else{
+    ANTIFREEZE_PUMP = 0;
+    }
+}
+
+void UpdateSolarColectorTemp(){
+unsigned int Bits;
+int Temp;
+    if(SolarColectorState==-1){
+     
+    }
+    else if(SolarColectorState==10){
+    Bits = read_adc(0);
+    Temp = (Bits*165)/1023 - 30; 
+    BOILER_TEMP = Temp;
+        
+        
+    }
+    else if(SolarColectorState==20){
+    Bits = read_adc(0);
+    Temp = (Bits*165)/1023 - 30;
+    LAST_SOLAR_INPUT_TEMP = SOLAR_INPUT_TEMP;
+    SOLAR_INPUT_TEMP = Temp;
+
+     
+    }
+    else if(SolarColectorState==30){
+    SolarColectorState = 0;
+        
+    Bits = read_adc(0);
+    Temp = (Bits*165)/1023 - 30;
+        if(SOLAR_OUTPUT_TEMP>LAST_SOLAR_OUTPUT_TEMP){
+            if(Acceleration<5){
+            Acceleration++;
+            }
+        }
+        else{
+            if(Acceleration>0){
+            Acceleration--;
+            }
+        } 
+     
+    LAST_SOLAR_OUTPUT_TEMP = SOLAR_OUTPUT_TEMP;
+    SOLAR_OUTPUT_TEMP = Temp;
+
+    CalculateJobAndPower();
+    CheckPumps();       
+    }
+SolarColectorState++;
+}
+
+void CheckButtons(){
+//PORTD.2 = 
+
+
+
+
+
+    if(PIND.7==1){// 1
+        if(ButtonFilter[0]==0){      
+        BUTTON[0] = 1;
+        ButtonFilter[0] = 1;
+        RefreshLcd = 1;
+        }
+        else{
+        BUTTON[0] = 0;
+        }
+    }
+    else{
+    ButtonFilter[0] = 0;
+    BUTTON[0] = 0;
+    }
+    if(PIND.6==1){// 2
+        if(ButtonFilter[1]==0){      
+        BUTTON[1] = 1;
+        ButtonFilter[1] = 1;
+        RefreshLcd = 1;
+        }
+        else{
+        BUTTON[1] = 0;
+        }
+    }
+    else{
+    ButtonFilter[1] = 0;
+    BUTTON[1] = 0;
+    }
+    if(PIND.5==1){// 3
+        if(ButtonFilter[2]==0){      
+        BUTTON[2] = 1;
+        ButtonFilter[2] = 1;
+        RefreshLcd = 1;
+        }
+        else{
+        BUTTON[2] = 0;
+        }
+    }
+    else{
+    ButtonFilter[2] = 0;
+    BUTTON[2] = 0;
+    }    
+    if(PIND.4==1){// 4
+        if(ButtonFilter[3]==0){      
+        BUTTON[3] = 1;
+        ButtonFilter[3] = 1;
+        RefreshLcd = 1;
+        }
+        else{
+        BUTTON[3] = 0;
+        }
+    }
+    else{
+    ButtonFilter[3] = 0;
+    BUTTON[3] = 0;
+    }    
+    if(PIND.3==1){// 5
+        if(ButtonFilter[4]==0){      
+        BUTTON[4] = 1;
+        ButtonFilter[4] = 1;
+        RefreshLcd = 1;
+        }
+        else{
+        BUTTON[4] = 0;
+        }
+    }
+    else{
+    ButtonFilter[4] = 0;
+    BUTTON[4] = 0;
+    }    
+}
+
+char NumToIndex(char Num){
+    if(Num==0){     return '0';}
+    else if(Num==1){return '1';}
+    else if(Num==2){return '2';}
+    else if(Num==3){return '3';}
+    else if(Num==4){return '4';}
+    else if(Num==5){return '5';}
+    else if(Num==6){return '6';}
+    else if(Num==7){return '7';} 
+    else if(Num==8){return '8';}
+    else if(Num==9){return '9';}
+return 0;
+}
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+interrupt [TIM0_OVF] void timer0_ovf_isr(void){
+RealTimeTimer++;
+    if(RealTimeTimer>=OneSecondTimer){
+    RealTimeTimer = 0;
+    UpdateTime();        
+    UpdateSolarColectorTemp();    
+    }
+    
+    if(RealTimeTimer==(OneSecondTimer/5)){
+    RefreshLcd = 1;
+    }
+}
+
+void main(void)
+{
+
+// Input/Output Ports initialization
+// Port A initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=0 State0=0 
+PORTA=0x00;
+DDRA=0b00000000;
+
+// Port B initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+PORTB=0x00;
+DDRB=0b00000000;
+
+// Port C initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+PORTC=0x00;
+DDRC=0b00000000;
+
+// Port D initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+PORTD=0x00;
+DDRD=0b00000000;
+
+// Timer/Counter 0 initialization
+// Clock source: System Clock
+// Clock value: 125.000 kHz
+// Mode: Normal top=FFh
+// OC0 output: Disconnected
+TCCR0=0x03;
+TCNT0=0x00;
+OCR0=0x00;
+
+// Timer/Counter 1 initialization
+// Clock source: System Clock
+// Clock value: Timer1 Stopped
+// Mode: Normal top=FFFFh
+// OC1A output: Discon.
+// OC1B output: Discon.
+// Noise Canceler: Off
+// Input Capture on Falling Edge
+// Timer1 Overflow Interrupt: Off
+// Input Capture Interrupt: Off
+// Compare A Match Interrupt: Off
+// Compare B Match Interrupt: Off
+TCCR1A=0x00;
+TCCR1B=0x00;
+TCNT1H=0x00;
+TCNT1L=0x00;
+ICR1H=0x00;
+ICR1L=0x00;
+OCR1AH=0x00;
+OCR1AL=0x00;
+OCR1BH=0x00;
+OCR1BL=0x00;
+
+// Timer/Counter 2 initialization
+// Clock source: System Clock
+// Clock value: Timer2 Stopped
+// Mode: Normal top=FFh
+// OC2 output: Disconnected
+ASSR=0x00;
+TCCR2=0x00;
+TCNT2=0x00;
+OCR2=0x00;
+
+// External Interrupt(s) initialization
+// INT0: Off
+// INT1: Off
+// INT2: Off
+MCUCR=0x00;
+MCUCSR=0x00;
+
+// Timer(s)/Counter(s) Interrupt(s) initialization
+TIMSK=0x01;
+
+// Analog Comparator initialization
+// Analog Comparator: Off
+// Analog Comparator Input Capture by Timer/Counter 1: Off
+ACSR=0x80;
+SFIOR=0x00;
+
+// ADC initialization
+// ADC Clock frequency: 1000.000 kHz
+// ADC Voltage Reference: AREF pin
+// ADC Auto Trigger Source: None
+ADMUX=ADC_VREF_TYPE & 0xff;
+ADCSRA=0x83;
+
+// LCD module initialization
+lcd_init(16);
+
+// Global enable interrupts
+#asm("sei")
+
+    while(TurnOnTimer<=4200){
+    char State = TurnOnTimer/200; 
+        if(State*200==TurnOnTimer){
+        lcd_clear();
+            if(State==1)      {lcd_gotoxy(15,0);lcd_puts("H");    }
+            else if(State==2) {lcd_gotoxy(14,0);lcd_puts("He");   }
+            else if(State==3) {lcd_gotoxy(13,0);lcd_puts("Hel");  }
+            else if(State==4) {lcd_gotoxy(12,0);lcd_puts("Hell"); }
+            else if(State==5) {lcd_gotoxy(11,0);lcd_puts("Hello");}
+            else if(State==6) {lcd_gotoxy(10,0);lcd_puts("Hello");}
+            else if(State==7) {lcd_gotoxy(9,0); lcd_puts("Hello");}
+            else if(State==8) {lcd_gotoxy(8,0); lcd_puts("Hello");}
+            else if(State==9) {lcd_gotoxy(7,0); lcd_puts("Hello");}
+            else if(State==10){lcd_gotoxy(6,0); lcd_puts("Hello");}
+            else if(State==11){lcd_gotoxy(5,0); lcd_puts("Hello");}
+            else if(State==12){lcd_gotoxy(4,0); lcd_puts("Hello");}
+            else if(State==13){lcd_gotoxy(3,0); lcd_puts("Hello");}
+            else if(State==14){lcd_gotoxy(2,0); lcd_puts("Hello");}
+            else if(State==15){lcd_gotoxy(1,0); lcd_puts("Hello");}
+            else if(State==16){lcd_gotoxy(0,0); lcd_puts("Hello");}
+            else if(State==17){lcd_gotoxy(0,0); lcd_puts("ello"); }
+            else if(State==18){lcd_gotoxy(0,0); lcd_puts("llo");  }
+            else if(State==19){lcd_gotoxy(0,0); lcd_puts("lo");   }
+            else if(State==20){lcd_gotoxy(0,0); lcd_puts("o");    }
+        }
+    delay_us(100);
+    TurnOnTimer++;
+    }
+   
+    while(1){   
+    CheckButtons();
+                                                                          
+    //////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
+        if(RefreshLcd==1){
+            if(LcdAddress[0]==0){
+            ///////////////
+                if(LcdAddress[1]==0){                  
+                // Pradinis langas
+                lcd_gotoxy(0,0);lcd_puts("100.0C KOL.TEMP.");
+                lcd_gotoxy(0,1);lcd_puts("100.0C BOIL.TEMP");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 9;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 2;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    }                     
+                }
+            ///////////////
+            }
+            else if(LcdAddress[0]==1){
+            ///////////////             
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("070.0C KOL.ISEJ.");
+                lcd_gotoxy(0,1);lcd_puts("060.0C KOL.IEJIM");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 0;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 2;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    }
+                }
+            ///////////////   
+            }
+            else if(LcdAddress[0]==2){
+            /////////////// 
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("00.0C TEMP.SKIRT");
+                lcd_gotoxy(0,1);lcd_puts("    KEISTI?-->* ");
+
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 1;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 3;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    }
+                    else if(BUTTON[4]==1){
+                    
+                    }                 
+                }
+                else if(LcdAddress[1]==1){
+                lcd_gotoxy(0,0);lcd_puts("00.0C TEMP.SKIRT");
+                lcd_gotoxy(0,1);lcd_puts(" <  >  +  -   * ");
+                    if(BUTTON[0]==1){
+                    
+                    }
+                    else if(BUTTON[1]==1){
+                    
+                    }
+                    else if(BUTTON[2]==1){
+                    
+                    }
+                    else if(BUTTON[3]==1){
+                    
+                    }
+                    else if(BUTTON[4]==1){
+                    
+                    }                
+                }
+            ///////////////    
+            }
+            else if(LcdAddress[0]==3){
+            /////////////// 
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("  95C APSAUGA   ");
+                lcd_gotoxy(0,1);lcd_puts("  NESUVEIKUSI   "); 
+                }
+                else if(LcdAddress[1]==1){
+                lcd_gotoxy(0,0);lcd_puts("  SUVEIKE  95C  ");
+                lcd_gotoxy(0,1);lcd_puts("    APSAUGA     "); 
+                }
+                
+                if(BUTTON[0]==1){
+                LcdAddress[0] = 2;
+                LcdAddress[1] = 0;
+                BUTTON[0] = 0; 
+                }
+                else if(BUTTON[1]==1){
+                LcdAddress[0] = 4;
+                LcdAddress[1] = 0;
+                BUTTON[1] = 0;
+                }   
+            ///////////////
+            }
+            else if(LcdAddress[0]==4){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("DATA:2011-05-28 ");
+                lcd_gotoxy(0,1);lcd_puts(" NUSTATYTI?-->* ");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 3;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 5;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+                else if(LcdAddress[1]==1){
+                lcd_gotoxy(0,0);lcd_puts("DATA: 2011-05-28");
+                lcd_gotoxy(0,1);lcd_puts(" <  >  +  -   * ");
+                    if(BUTTON[0]==1){
+                      
+                    }
+                    else if(BUTTON[1]==1){
+                     
+                    }
+                    else if(BUTTON[2]==1){
+                     
+                    }
+                    else if(BUTTON[3]==1){
+                     
+                    }
+                    else if(BUTTON[4]==1){
+                     
+                    } 
+                }
+            /////////////// 
+            }
+            else if(LcdAddress[0]==5){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("1000W MOMENTINE ");
+                lcd_gotoxy(0,1);lcd_puts("     GALIA      ");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 4;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 6;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+            ///////////////
+            }
+            else if(LcdAddress[0]==6){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("000001123.000kWh");
+                lcd_gotoxy(0,1);lcd_puts("ENERG.SKAITIKLIS");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 5;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 7;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+            ///////////////
+            }
+            else if(LcdAddress[0]==7){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("MAKS.DIENOS.TEMP");
+                lcd_gotoxy(0,1);lcd_puts("     85.0C      ");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 6;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 8;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+            ///////////////
+            }
+            else if(LcdAddress[0]==8){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("IVYKIAI:        ");
+                lcd_gotoxy(0,1);lcd_puts("PERZIURETI?-->* ");
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 7;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 9;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+                //else{
+                //lcd_gotoxy(0,0);lcd_puts("               ");
+                //lcd_gotoxy(0,1);lcd_puts("PERZIURETI?-->* "); 
+                //}
+            ///////////////
+            }
+            else if(LcdAddress[0]==9){
+            ///////////////
+                if(LcdAddress[1]==0){
+                lcd_gotoxy(0,0);lcd_puts("LAIKAS:   :     ");
+                lcd_gotoxy(0,1);lcd_puts("NUSTATYTI?-->*  ");
+                lcd_gotoxy(8,0);lcd_putchar( NumToIndex( RealTimeHour/10) );
+                lcd_gotoxy(9,0);lcd_putchar( NumToIndex( RealTimeHour-((RealTimeHour/10))*10) );
+                lcd_gotoxy(11,0);lcd_putchar(NumToIndex( RealTimeMinute/10) );
+                lcd_gotoxy(12,0);lcd_putchar(NumToIndex( RealTimeMinute-((RealTimeMinute/10))*10) );
+                 
+                    if(BUTTON[0]==1){
+                    LcdAddress[0] = 8;
+                    LcdAddress[1] = 0;
+                    BUTTON[0] = 0; 
+                    }
+                    else if(BUTTON[1]==1){
+                    LcdAddress[0] = 0;
+                    LcdAddress[1] = 0;
+                    BUTTON[1] = 0;
+                    } 
+                }
+                else if(LcdAddress[1]==1){
+                lcd_gotoxy(0,0);lcd_puts("LAIKAS: 14:12   ");
+                lcd_gotoxy(0,1);lcd_puts(" <  >  +  -   * ");
+                    if(BUTTON[0]==1){
+                    
+                    }
+                    else if(BUTTON[1]==1){
+                    
+                    }
+                    else if(BUTTON[2]==1){
+                    
+                    }
+                    else if(BUTTON[3]==1){
+                    
+                    }
+                    else if(BUTTON[4]==1){
+                    
+                    } 
+                }
+            ///////////////
+            }
+        }
+    RefreshLcd = 0;
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+     
+    delay_us(100);
+    }
+}

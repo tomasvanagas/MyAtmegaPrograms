@@ -1,0 +1,3 @@
+main
+	trumpa_cirkul
+	saul_kol_blokas

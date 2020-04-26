@@ -1,0 +1,55 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+BUTTON                                                            0160h        4
+LcdText                                                           0164h        4
+LcdTaskas                                                         0168h        4
+Timer3                                                            016Ch        2
+Timer7                                                            016Eh        2
+Timer8                                                            0170h        2
+Timer9                                                            0172h        2
+Timer10                                                           0174h        2
+Timer11                                                           0176h        2
+Timer12                                                           0178h        2
+Timer14                                                           017Ah        2
+Timer19                                                           017Ch        2
+Timer20                                                           017Eh        2
+Timer24                                                           0180h        2
+LanguTrigeris                                                     0182h        1
+BATTERY_VOLTAGE                                                   0183h        2
+BATTERY_VOLTAGE_ARCHIVE                                           0185h       20
+ItamposTrigeris1                                                  0199h        1
+ItamposTrigeris2                                                  019Ah        1
+Timer29                                                           019Bh        2
+Timer16                                                           019Dh        2
+InteruptTimer                                                     019Fh        2
+Timer1                                                            01A1h        2
+Timer2                                                            01A3h        2
+Timer26                                                           01A5h        2
+Timer27                                                           01A7h        2
+Timer28                                                           01A9h        2
+Timer21                                                           01ABh        2
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+BATTERY_FOULT                                                     0000h        1
+Timer4                                                            0001h        2
+Timer5                                                            0003h        2
+MAX_BATTERY_VOLTAGE                                               0005h        2
+MIN_BATTERY_VOLTAGE                                               0007h        2
+Timer17                                                           0009h        2
+Timer18                                                           000Bh        2
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+OSC                                                               R4,R5        2
+SKIP                                                              R7           1
+UPS_STATE                                                         R6           1
+OLD_UPS_STATE                                                     R9           1
+KRAUTI                                                            R8           1
+LOAD                                                              R11          1
+BEEPER_OFF                                                        R10          1
+RealTime                                                          R13          1
+LangoAdresas                                                      R12          1

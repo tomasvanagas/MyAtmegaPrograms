@@ -1,0 +1,58 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+OSC                                                               0160h        1
+a                                                                 0161h        1
+segm_a                                                            0162h        1
+segm_b                                                            0163h        1
+segm_c                                                            0164h        1
+segm_d                                                            0165h        1
+segm_e                                                            0166h        1
+segm_f                                                            0167h        1
+segm_g                                                            0168h        1
+segm_h                                                            0169h        1
+MYGTUKAS_1                                                        016Ah        1
+MYGTUKAS_2                                                        016Bh        1
+MYGTUKAS_3                                                        016Ch        1
+MYGTUKAS_4                                                        016Dh        1
+MYGTUKAS_5                                                        016Eh        1
+MYGTUKAS_6                                                        016Fh        1
+MYGTUKAS_7                                                        0170h        1
+mygtuko_OSR                                                       0171h        1
+kondensatorius_tuscias                                            0172h        1
+kondensatorius_vidutinis                                          0173h        1
+kondensatorius_pilnas                                             0174h        1
+kondensatoriaus_rodymo_padetis                                    0175h        1
+kondensatoriaus_rodymo_laikas                                     0176h        2
+pasisveikinimo_laikas1                                            0178h        2
+pasisveikinimo_laikas2                                            017Ah        1
+REDAGAVIMAS                                                       017Bh        1
+SKAICIUS_DEGA                                                     017Ch        1
+blyksincio_skaiciaus_laiko_paskutinis_ciklas                      017Dh        2
+blyksincio_skaiciaus_laikas                                       017Fh        2
+blyksincio_skaiciaus_laiko_vidurinysis_ciklas                     0181h        2
+viena_laikrodzio_sekunde                                          0183h        2
+laikrodzio_sekundes                                               0185h        1
+laikrodzio_minutes                                                0186h        1
+laikrodzio_valandos                                               0187h        1
+begancio_uzraso_DABAR_padetis                                     0188h        1
+begancio_uzraso_DABAR_laikas                                      0189h        2
+pfet_kairysis                                                     018Bh        1
+pfet_desinysis                                                    018Ch        1
+nfet_kairysis                                                     018Dh        1
+nfet_desinysis                                                    018Eh        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+pasisveikinimas_baigtas                                           R5           1
+x                                                                 R4           1
+y                                                                 R7           1
+z                                                                 R6           1
+VIENA_SEKUNDE                                                     R8,R9        2
+PUSE_SEKUNDES                                                     R10,R11      2
+KETVIRTADALIS_SEKUNDES                                            R12,R13      2

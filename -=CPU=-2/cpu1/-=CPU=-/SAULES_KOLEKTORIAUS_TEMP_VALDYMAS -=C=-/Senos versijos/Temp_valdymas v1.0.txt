@@ -1,0 +1,95 @@
+char INPUTAS,SKAICIUS,SKAICIUS_2,uzlaikymas,RESETO_LAIKAS,RESETO_RELE;
+char a;
+void main(){{
+TRISA = 0b10;
+TRISB = 0;}
+
+PORTA = 0;
+PORTB = 0;
+SKAICIUS = 1;
+uzlaikymas = 1;
+
+//=======RESETO RELES ISIJUNGIMO LAIKAS a * Delay_ms( x )==========//
+a = 25;
+//=======RESETO RELES ISIJUNGIMO LAIKAS a * Delay_ms( x )==========//
+
+do {
+Delay_ms(20);
+
+
+//INPUTAS:
+if((PORTA.F1==1)&&(uzlaikymas==0)){
+INPUTAS = 1;
+uzlaikymas = 1;}
+
+
+if(PORTA.F1==0){
+uzlaikymas = 0;}
+
+//PROGRAMA:
+if(INPUTAS==1){
+SKAICIUS = SKAICIUS + 1;}
+
+if(SKAICIUS==12){
+SKAICIUS = 1;}
+
+//resetas
+if(SKAICIUS!=1){
+RESETO_LAIKAS = 0;}
+
+if((SKAICIUS==1)&&(RESETO_LAIKAS<=a)){
+RESETO_RELE = 1;
+RESETO_LAIKAS = RESETO_LAIKAS + 1;}
+
+//desifravimas
+if(SKAICIUS==1 ){SKAICIUS_2 = 1;}
+if(SKAICIUS==2 ){SKAICIUS_2 = 3;}
+if(SKAICIUS==3 ){SKAICIUS_2 = 2;}
+if(SKAICIUS==4 ){SKAICIUS_2 = 4;}
+if(SKAICIUS==5 ){SKAICIUS_2 = 7;}
+if(SKAICIUS==6 ){SKAICIUS_2 = 5;}
+if(SKAICIUS==7 ){SKAICIUS_2 = 6;}
+if(SKAICIUS==8 ){SKAICIUS_2 = 4;}
+if(SKAICIUS==9 ){SKAICIUS_2 = 2;}
+if(SKAICIUS==10){SKAICIUS_2 = 5;}
+if(SKAICIUS==11){SKAICIUS_2 = 3;}
+
+
+//OUTPUTAI:
+{if(SKAICIUS_2.F0==1){
+PORTB.F1 = 1;}
+else                            // A
+PORTB.F1 = 0;}
+
+{if(SKAICIUS_2.F1==1){
+PORTB.F4 = 1;}
+else                            // B
+PORTB.F4 = 0;}
+
+{if(SKAICIUS_2.F2==1){
+PORTB.F2 = 1;}                  // C
+else
+PORTB.F2 = 0;}
+
+{if(SKAICIUS<=7){
+PORTB.F5 = 0;}                  // D1
+else
+PORTB.F5 = 1;}
+
+{if(SKAICIUS>7){
+PORTB.F6 = 0;}                  // D2
+else
+PORTB.F6 = 1;}
+
+{if(RESETO_RELE==1){
+PORTB.F7 = 1;}
+else
+PORTB.F7 = 0;}
+
+
+//FILTRAVIMAS:
+INPUTAS = 0;
+RESETO_RELE = 0;
+SKAICIUS_2 = 0;
+}
+while(1);}

@@ -1,0 +1,81 @@
+char LAIKAS,GREITASIS_REZIMAS, PADETIS,
+RELE1,RELE2,RELE3,RELE4,KELETAS_CIKLU;
+
+void main(){{
+TRISA = 0b10;
+TRISB = 0;}
+
+KELETAS_CIKLU = 20;
+
+do {
+
+
+     // INPUTAS
+if(PORTA.F1==1){
+GREITASIS_REZIMAS = 1;}
+
+    // IJUNGIANT KELETAS CIKLU
+if((LAIKAS==39)&&(KELETAS_CIKLU>0)){
+KELETAS_CIKLU = KELETAS_CIKLU - 1;}
+
+if(KELETAS_CIKLU>0){
+GREITASIS_REZIMAS = 1;}
+
+    // GREITASIS REZIMAS
+{if(GREITASIS_REZIMAS==1){
+Delay_ms(139);}
+else
+Delay_ms(1000);}
+
+    // PROGRAMA
+LAIKAS = LAIKAS + 1;
+if(LAIKAS==40){
+PADETIS = PADETIS + 1;
+LAIKAS = 0;}
+if(PADETIS==4){
+PADETIS = 0;}
+
+
+if(PADETIS==0){
+RELE1 = 1;}
+if(PADETIS==1){
+RELE2 = 1;}
+if(PADETIS==2){
+RELE3 = 1;}
+if(PADETIS==3){
+RELE4 = 1;}
+
+     //  OUTPUTAI
+{if((((LAIKAS>20)&&(LAIKAS<23))&&(GREITASIS_REZIMAS==0))||
+    ((LAIKAS>20)&&(LAIKAS<35)&&(GREITASIS_REZIMAS==1))){
+PORTB.F4 = 1;}                                               //MEMORIZACIJA
+else
+PORTB.F4 = 0;}
+
+{if((RELE1==1)&&(LAIKAS>0)){
+PORTB.F5 = 1;}
+else
+PORTB.F5 = 0;}
+
+{if((RELE2==1)&&(LAIKAS>0)){
+PORTB.F6 = 1;}
+else
+PORTB.F6 = 0;}
+
+{if((RELE3==1)&&(LAIKAS>0)){
+PORTB.F7 = 1;}
+else
+PORTB.F7 = 0;}
+
+{if((RELE4==1)&&(LAIKAS>0)){
+PORTA.F0 = 1;}
+else
+PORTA.F0 = 0;}
+
+     // FILTRAVIMAS
+RELE1 = 0;
+RELE2 = 0;
+RELE3 = 0;
+RELE4 = 0;
+GREITASIS_REZIMAS = 0;}
+while(1);}

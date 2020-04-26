@@ -1,0 +1,8 @@
+main
+	filtravimas
+	VISUAL
+	valanda
+	minute
+	sekunde
+	INPUTAI
+	oscilatorius

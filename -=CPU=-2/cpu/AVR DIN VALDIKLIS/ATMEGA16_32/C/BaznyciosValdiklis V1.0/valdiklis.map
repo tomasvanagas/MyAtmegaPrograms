@@ -1,0 +1,52 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+MAIN_MENU_TIMER                                                   0260h        1
+LCD_LED_TIMER                                                     0261h        1
+RefreshTime                                                       0262h        1
+RowsOnWindow                                                      0263h        1
+Address                                                           0264h        6
+SelectedRow                                                       026Ah        1
+RefreshLcd                                                        026Bh        1
+lcd_light_osc                                                     026Ch        1
+lcd_light_now                                                     026Dh        1
+STAND_BY                                                          026Eh        1
+UNLOCKED                                                          026Fh        1
+SecondCounter                                                     0270h        2
+TimeRefreshed                                                     0272h        1
+TIME_EDITING                                                      0273h        1
+CALL_BELL                                                         0274h        2
+BUTTON                                                            0276h        5
+ButtonFilter                                                      027Bh        5
+lcd_led_counter                                                   0280h        1
+stand_by_pos                                                      0281h        2
+entering_code                                                     0283h        2
+_base_y                                                           0285h        4
+_lcd_x                                                            0289h        1
+_lcd_y                                                            028Ah        1
+_lcd_maxx                                                         028Bh        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+BELL_OUTPUT_ADDRESS                                               0000h        1
+SUMMER_TIME_TURNED_ON                                             0001h        1
+IS_CLOCK_SUMMER                                                   0002h        1
+RealTimePrecisioningValue                                         0003h        1
+CODE                                                              0004h        2
+IS_LOCK_TURNED_ON                                                 0006h        1
+BELL_TIME                                                         0007h      780
+lcd_light                                                         0313h        1
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+RealTimeYear                                                      R5           1
+RealTimeMonth                                                     R4           1
+RealTimeDay                                                       R7           1
+RealTimeHour                                                      R6           1
+RealTimeMinute                                                    R9           1
+RealTimeWeekDay                                                   R8           1
+RealTimeSecond                                                    R11          1
+IsRealTimePrecisioned                                             R10          1
+STAND_BY_TIMER                                                    R12,R13      2

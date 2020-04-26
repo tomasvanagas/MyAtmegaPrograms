@@ -1,0 +1,55 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+__ds18b20_scratch_pad                                             0500h        9
+TEMPERATURES                                                      0509h       32
+dac_data                                                          0529h        4
+RowsOnWindow                                                      052Dh        1
+Address                                                           052Eh        6
+SelectedRow                                                       0534h        1
+RefreshLcd                                                        0535h        1
+lcd_light_osc                                                     0536h        1
+lcd_light_now                                                     0537h        1
+ds18b20_devices                                                   0538h        1
+rom_code                                                          0539h       72
+ds18b20_sensor_assignation                                        0581h        8
+STAND_BY                                                          0589h        1
+SecondCounter                                                     058Ah        2
+TimeRefreshed                                                     058Ch        1
+BUTTON                                                            058Dh        5
+ButtonFilter                                                      0592h        5
+ds18b20_wait_time                                                 0597h        1
+ds18b20_scanning_device                                           0598h        1
+error_temperature                                                 0599h        8
+ADC_CHANNEL                                                       05A1h        1
+AlgorythmSecondTimer                                              05A2h        1
+ALGORYTHM_REFRESH_TIME                                            05A3h        1
+VERY_LAST_TEMPERATURES                                            05A4h       32
+LAST_TEMPERATURES                                                 05C4h       32
+LAST_SOLARIUM_STATE_S0000006001                                   05E4h        3
+SOLARIUM_OUTSIDE_OFFSET                                           05E7h        4
+SOLARIUM_INSIDE_OFFSET                                            05EBh        4
+lcd_led_counter                                                   05EFh        1
+stand_by_pos                                                      05F0h        2
+_base_y                                                           05F2h        4
+_seed                                                             05F6h        4
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+DS18B20_IS_ASSIGNED                                               0000h        8
+DS18B20_ADDRESSES                                                 0008h       72
+ROOM_TEMPERATURE                                                  0050h        4
+MANUAL_CONTROLLER                                                 0054h        1
+lcd_light                                                         0055h        1
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+STAND_BY_TIMER                                                    R4,R5        2
+MAIN_MENU_TIMER                                                   R7           1
+LCD_LED_TIMER                                                     R6           1
+RefreshTime                                                       R9           1
+_lcd_x                                                            R8           1
+_lcd_y                                                            R11          1
+_lcd_maxx                                                         R10          1

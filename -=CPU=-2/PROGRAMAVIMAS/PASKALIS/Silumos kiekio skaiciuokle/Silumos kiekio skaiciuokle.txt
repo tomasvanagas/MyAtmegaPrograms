@@ -1,0 +1,26 @@
+program Silumines_talpos_skaiciavimas;
+var Ro, c, t, V, Q:real;
+begin
+  WriteLn('   <<<<<<=====Silumines talpos skaiciuotuvas=====>>>>>>');
+  WriteLn('');
+  WriteLn('      +-------------------------------------------+');
+  WriteLn('      +                 (c*Ro*V*t)                +');
+  WriteLn('      + Formule ==>  Q= ----------        (Q = Wh)+');
+  WriteLn('      +                    3600                   +');
+  WriteLn('      +-------------------------------------------+');
+  WriteLn('');
+  WriteLn('');
+  Write('Irasykite medziagos savitaja siluma ( J/(kg*C) ) ===> ');
+  Read(c);
+  Write('Irasykite medziagos tanki ( kg/m3 )              ===> ');
+  Read(Ro);
+  Write('Irasykite medziagos turi ( m3 )                  ===> ');
+  Read(V);
+  Write('Irasykite temperaturu skirtuma ( C )             ===> ');
+  Read(t);
+  WriteLn('');
+  Q:=(c*Ro*V*t)/3600;
+  Write('  Q = ',Q:5:2,' (Wh)');
+  Readln;
+  Readln;
+end.

@@ -1,0 +1,6 @@
+main DSTACK_USAGE:2 DSTACK_LEVEL:2 FILE:"Petrui valdikl.c" LINE:569
+lcd_put_number DSTACK_USAGE:22 DSTACK_LEVEL:24 FILE:"Petrui valdikl.c" LINE:228
+lcd_putchar DSTACK_USAGE:1 DSTACK_LEVEL:25 FILE:"C:\Program Files\CodeVisionAVR\lib\lcd.lib" LINE:178
+lcd_gotoxy DSTACK_USAGE:2 DSTACK_LEVEL:27 FILE:"C:\Program Files\CodeVisionAVR\lib\lcd.lib" LINE:158
+_lcd_write_data DSTACK_USAGE:1 DSTACK_LEVEL:28 FILE:"C:\Program Files\CodeVisionAVR\lib\lcd.lib" LINE:77
+timer0_ovf_isr DSTACK_USAGE:5 DSTACK_LEVEL:33 FILE:"Petrui valdikl.c" LINE:546

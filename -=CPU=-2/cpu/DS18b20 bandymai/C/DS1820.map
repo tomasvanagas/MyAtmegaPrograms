@@ -1,0 +1,18 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+__ds1820_scratch_pad                                              0A00h        9
+ds1820_rom_codes                                                  0A09h      360
+_base_y                                                           0B71h        4
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+ds1820_devices                                                    R4           1
+_lcd_x                                                            R3           1
+_lcd_y                                                            R6           1
+_lcd_maxx                                                         R5           1

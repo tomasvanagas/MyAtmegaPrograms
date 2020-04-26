@@ -1,0 +1,77 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+prtc_get_time                                                     0282h        2
+prtc_get_date                                                     0284h        2
+Address                                                           0286h        6
+SOLAR_OUTPUT_TEMP                                                 028Ch        2
+PAGRINDINIS_LANGAS                                                028Eh        1
+Call_1Second                                                      028Fh        1
+CODE_IsEntering                                                   0290h        1
+CODE_SuccessXYZ                                                   0291h        3
+CODE_FailedXYZ                                                    0294h        3
+CODE_TimeLeft                                                     0297h        1
+CODE_EnteringCode                                                 0298h        2
+CODE_ExecutingDigit                                               029Ah        1
+DataToSent                                                        029Bh      200
+InteruptTimer                                                     0363h        2
+MissTimer                                                         0365h        2
+RefreshTimer                                                      0367h        2
+MemoryTimer                                                       0369h        1
+TERMOSWICH                                                        036Ah        1
+Called_1Second                                                    036Bh        1
+SolarColectorState                                                036Ch        1
+CHECK_JOB_POWER                                                   036Dh        1
+SolarPower                                                        036Eh        2
+LOGS_Termoswich                                                   0370h        1
+BUTTON                                                            0371h        5
+ButtonFilter                                                      0376h        5
+DUAL_BUTTON                                                       037Bh        4
+DualButtonFilter                                                  037Fh        4
+status                                                            0383h        1
+timer1                                                            0384h        1
+timer2                                                            0385h        1
+card_type                                                         0386h        1
+pv_S101000B000                                                    0387h        1
+FatFs                                                             0388h        2
+Fsid                                                              038Ah        2
+Drive                                                             038Ch        1
+_base_y                                                           038Dh        4
+_lcd_x                                                            0391h        1
+_lcd_y                                                            0392h        1
+_lcd_maxx                                                         0393h        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+RealTimeYear                                                      0000h        2
+RealTimeMonth                                                     0002h        1
+RealTimeDay                                                       0003h        1
+RealTimeHour                                                      0004h        1
+RealTimeMinute                                                    0005h        1
+RealTimeSecond                                                    0006h        1
+NewestLog                                                         0007h        1
+LogYear                                                           0008h      180
+LogMonth                                                          00BCh       90
+LogDay                                                            0116h       90
+LogHour                                                           0170h       90
+LogMinute                                                         01CAh       90
+LogType                                                           0224h       90
+LogData1                                                          027Eh      180
+LogData2                                                          0332h      180
+LitersPerMinute                                                   03E6h        2
+SolarColectorWattHours                                            03E8h        4
+WattHoursPerDay                                                   03ECh        4
+MinimumAntifreezeTemp                                             03F0h        2
+DifferenceBoilerAndSolar                                          03F2h        2
+MaxDayTemperature                                                 03F4h        2
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+RefreshLcd                                                        R5           1
+LAST_SOLAR_INPUT_TEMP                                             R6,R7        2
+LAST_SOLAR_OUTPUT_TEMP                                            R8,R9        2
+BOILER_TEMP                                                       R10,R11      2
+SOLAR_INPUT_TEMP                                                  R12,R13      2
+Acceleration                                                      R4           1

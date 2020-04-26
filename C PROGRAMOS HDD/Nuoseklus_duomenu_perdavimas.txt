@@ -1,0 +1,659 @@
+//data[0] - adreasas ;
+//data[1] - komanda  ;
+//data[2] - duomenys ;
+//data[3] - duomenys ;
+//data[4] - duomenys ;
+//data[5] - duomenys ;
+//data[6] - duomenys ;
+
+
+
+char mikroschemos_adresas, data[6];
+char gauti_data,Rx,Tx, CLOCK,a,b,c1,d,e;
+
+void gauti_adresa();
+void adresas();
+void gauti_komanda();
+void komandos_vygdymas();
+void gauti_duomenis();
+void siusti_duomenis();
+void gavau_bita();
+void gavau_baita();
+void gavo_bita();
+void gavo_baita();
+void uzlaikymas();
+
+void main() {{
+TRISA = 0;
+TRISB = 1;  }
+
+mikroschemos_adresas = 1;
+
+while(1){
+
+if(gauti_data==1){
+gauti_adresa();}
+
+}}
+
+
+void gauti_adresa()      {
+while(CLOCK==1){};
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F0 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F1 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F2 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F3 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F4 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F5 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F6 = Rx;
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[0].F7 = Rx;
+
+adresas();}
+
+
+void adresas()   {
+if(mikroschemos_adresas==data[0]){
+gauti_komanda();}}
+
+
+
+void gauti_komanda()  {
+while(CLOCK==1){};
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[1].F7 = Rx;
+gavau_baita();
+komandos_vygdymas();}
+
+
+
+void komandos_vygdymas() {
+if(data[1]==1)    {
+gauti_duomenis(); }
+if(data[1]==2)    {
+siusti_duomenis();}	 }
+
+
+
+void gauti_duomenis()  {
+while(CLOCK==1){};
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[2].F7 = Rx;
+gavau_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[3].F7 = Rx;
+gavau_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[4].F7 = Rx;
+gavau_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[5].F7 = Rx;
+gavau_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F0 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F1 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F2 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F3 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F4 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F5 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F6 = Rx;
+gavau_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+data[6].F7 = Rx;
+gavau_baita();
+
+a = data[2];
+b = data[3];
+c1 = data[4];
+d = data[5];
+e = data[6];
+data[0] = 0;
+data[1] = 0;
+data[2] = 0;
+data[3] = 0;
+data[4] = 0;
+data[5] = 0;
+data[6] = 0;     }
+
+
+
+void siusti_duomenis(){
+data[2] = a;
+data[3] = b;
+data[4] = c1;
+data[5] = d;
+data[6] = e;
+
+while(CLOCK==1){};
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F0;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F1;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F2;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F3;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F4;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F5;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F6;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[2].F7;
+gavo_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F0;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F1;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F2;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F3;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F4;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F5;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F6;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[3].F7;
+gavo_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F0;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F1;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F2;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F3;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F4;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F5;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F6;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[4].F7;
+gavo_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F0;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F1;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F2;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F3;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F4;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F5;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F6;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[5].F7;
+gavo_baita();
+
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F0;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F1;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F2;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F3;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F4;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F5;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F6;
+gavo_bita();
+
+while(CLOCK==0){};
+while(CLOCK==1){};
+uzlaikymas();
+Tx = data[6].F7;
+gavo_baita();
+
+
+data[0] = 0;
+data[1] = 0;
+data[2] = 0;
+data[3] = 0;
+data[4] = 0;
+data[5] = 0;
+data[6] = 0;
+}
+
+
+void gavau_bita() {
+Delay_ms(3);
+Tx = 1;
+Delay_ms(3);
+Tx = 0; }
+
+
+
+void gavau_baita() {
+Delay_ms(3);
+Tx = 1;
+Delay_ms(3);
+Tx = 0;
+Delay_ms(3);
+Tx = 1;
+Delay_ms(3);
+Tx = 0; }
+
+
+
+void gavo_bita() {
+while(Rx==0){};
+while(Rx==1){};  }
+
+
+
+void gavo_baita() {
+while(Rx==0){};
+while(Rx==1){};
+while(Rx==0){};
+while(Rx==1){};  }
+
+
+
+void uzlaikymas() {
+Delay_ms(10);}

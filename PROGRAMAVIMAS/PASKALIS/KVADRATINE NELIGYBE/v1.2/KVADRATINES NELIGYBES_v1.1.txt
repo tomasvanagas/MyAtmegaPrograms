@@ -1,0 +1,175 @@
+program Kvadratines_neligybes;
+var ZENKLAS,a,b,c,DISKR,x,x1,x2:real;
+begin
+  WriteLn('Kvadratine nelygybe ax2 + bx + c (zenklas) 0');
+  WriteLn('');
+  WriteLn('Zenklas:');
+  WriteLn('  1. >');
+  WriteLn('  2. <');
+  WriteLn('  3. >= (DAUGIAU ARBA LYGU)');
+  WriteLn('  4. =< (MAZIAU ARBA LYGU)');
+  WriteLn('');
+  Write('Pasirinkite ZENKLA     ==>> ');
+  Read(ZENKLAS);
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA A ==>> ');
+  Read(a);
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA B ==>> ');
+  Read(b);
+  WriteLn('');
+  Write('IVESKITE KOEFICIENTA C ==>> ');
+  Read(c);
+  WriteLn('');
+  DISKR:=(b*b)-(4*a*c);                                                        // DISKRIMINANTAS
+  WriteLn('                <<<<<<<<<<SPRENDIMAS>>>>>>>>>>');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('D = (',b:6:2,' * ',b:6:2,') - (4.00 * ',a:6:2,' * ',
+        c:6:2,') = ',DISKR:6:1);
+  WriteLn('');
+  WriteLn('');
+
+  if(DISKR=0) then x:=-b/2*a;                                                 // SPRENDINIAI
+  if(DISKR>0) then x1:=(-b-Sqrt(DISKR))/(2*a);
+  if(DISKR>0) then x2:=(-b+Sqrt(DISKR))/(2*a);
+
+  if(DISKR=0) then
+  WriteLn('                   ',-b:6:2);
+
+  if(DISKR=0) then
+  WriteLn('            x= -------------- == ',x:6:2);
+
+  if(DISKR=0) then
+  WriteLn('                   2 *',a:6:2);
+
+  if(DISKR>0) then
+  WriteLn('                ', -b:6:2,'-',Sqrt(DISKR):6:2);
+
+  if(DISKR>0) then
+  WriteLn('           x1= -------------- ==',x1:6:2);
+
+  if(DISKR>0) then
+  WriteLn('                 2*',a:6:2);
+
+  if(DISKR>0) then
+  WriteLn('');
+
+  if(DISKR>0) then
+  WriteLn('');
+
+  if(DISKR>0) then
+  WriteLn('                ',-b:6:2,'+',Sqrt(DISKR):6:2);
+  if(DISKR>0) then
+  WriteLn('           x2= -------------- ==',x2:6:2);
+
+  if(DISKR>0) then
+  WriteLn('                 2 *',a:6:2);
+
+  if(DISKR<0) then
+  WriteLn('');
+
+  if(DISKR<0) then
+  WriteLn('     <<<<<=======DISKRIMINANTAS NEIGIAMAS=======>>>>>>');
+  WriteLn('');
+  WriteLn('');
+  WriteLn('+=============================================================+');
+  WriteLn('');
+
+  if((DISKR>0) and (a>0) and (ZENKLAS=1)) then
+  WriteLn('  ATS:. (-BEGALYBE;',x1:6:2,') (',x2:6:2,';+BEGALYBE)');
+
+  if((DISKR>0) and (a>0) and (ZENKLAS=2)) then
+  WriteLn('  ATS:. (',x1:6:2,';',x2:6:2,')');
+
+  if((DISKR>0) and (a>0) and (ZENKLAS=3)) then
+  WriteLn('  ATS:. (-BEGALYBE;',x1:6:2,'] [',x2:6:2,';+BEGALYBE)');
+
+  if((DISKR>0) and (a>0) and (ZENKLAS=4)) then
+  WriteLn('  ATS:. [',x1:6:2,';',x2:6:2,']');
+
+
+
+
+  if((DISKR<0) and (a>0) and (ZENKLAS=1)) then
+  WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+
+
+  if((DISKR<0) and (a>0) and (ZENKLAS=2)) then
+  WriteLn('  ATS:. SPRENDINIU NERA');
+
+
+  if((DISKR<0) and (a>0) and (ZENKLAS=3)) then
+  WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+
+  if((DISKR<0) and (a>0) and (ZENKLAS=4)) then
+  WriteLn('  ATS:. SPRENDINIU NERA');
+
+
+
+
+  if(DISKR=0) and (a>0) and (ZENKLAS=1) then
+  WriteLn('  ATS:. (-BEGALYBE;',x:6:2,'] [',x:6:2,';+BEGALYBE)');
+
+  if(DISKR=0) and (a>0) and (ZENKLAS=2) then
+  WriteLn('  ATS:. SPRENDINIU NERA');
+
+  if(DISKR=0) and (a>0) and (ZENKLAS=3) then
+  WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+
+  if(DISKR=0) and (a>0) and (ZENKLAS=4) then
+  WriteLn('  ATS:. ',x:6:2,'(=',x:6:2,')'   x1 = x2');
+
+
+
+
+   if(DISKR>0) and (a<0) and (ZENKLAS=1) then
+   WriteLn('  ATS:. (',x1:6:2,';',x2:6:2,')');
+
+   if(DISKR>0) and (a<0) and (ZENKLAS=2) then
+   WriteLn('  ATS:. (-BEGALYBE;',x1:6:2,'] [',x2:6:2,';+BEGALYBE)');
+
+   if(DISKR>0) and (a<0) and (ZENKLAS=3) then
+   WriteLn('  ATS:. [',x1:6:2,';',x2:6:2,']');
+
+   if(DISKR>0) and (a<0) and (ZENKLAS=4) then
+   WriteLn('  ATS:. (-BEGALYBE;',x1:6:2,'] [',x2:6:2,';+BEGALYBE)');
+
+
+
+
+   if(DISKR<0) and (a<0) and (ZENKLAS=1) then
+   WriteLn('  ATS:. SPRENDINIU NERA');
+
+   if(DISKR<0) and (a<0) and (ZENKLAS=2) then
+   WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+
+   if(DISKR<0) and (a<0) and (ZENKLAS=3) then
+   WriteLn('  ATS:. SPRENDINIU NERA');
+
+   if(DISKR<0) and (a<0) and (ZENKLAS=4) then
+   WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+
+
+
+
+   if(DISKR=0) and (a<0) and (ZENKLAS=1) then
+   WriteLn('  ATS:. SPRENDINIU NERA');
+
+   if(DISKR=0) and (a<0) and (ZENKLAS=2) then
+   WriteLn('  ATS:. (-BEGALYBE;',x:6:2,') (',x:6:2,';+BEGALYBE)');
+
+   if(DISKR=0) and (a<0) and (ZENKLAS=3) then
+   WriteLn('  ATS:. ',x:6:2,'(=',x:6:2,')'   x1 = x2);
+
+   if(DISKR=0) and (a<0) and (ZENKLAS=4) then
+   WriteLn('  ATS:. (-BEGALYBE;+BEGALYBE)');
+   WriteLn('');
+   WriteLn('');
+   WriteLn('+=============================================================+');
+   WriteLn('  IS MATEMATIKOS VADOVELIO LENTELES 103psl.');
+   WriteLn('+=============================================================+');
+   WriteLn('KVADRATINES NELYGYBES v.1.2                                T.V.');
+  ReadLn;
+  ReadLn;
+  end.

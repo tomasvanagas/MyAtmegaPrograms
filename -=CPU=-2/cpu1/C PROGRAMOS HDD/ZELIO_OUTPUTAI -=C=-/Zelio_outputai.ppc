@@ -1,0 +1,33 @@
+[DeviceName]
+Value=P16F84A
+[DeviceClock]
+Value=4
+[MainUnit]
+Value=Zelio_outputai.c
+[DeviceFlags]
+Count=2
+Value0=_WDT_OFF = $3FFB
+Value1=_HS_OSC = $3FFE
+Value2=_XT_OSC = $3FED
+[BuildType]
+bType=0
+[ProjectFiles]
+Count=1
+Value0=Zelio_outputai.c
+[HeaderFiles]
+Count=0
+[ObjLibFiles]
+Count=0
+[PLDFiles]
+Count=0
+[EEPROMinfo]
+isused=0
+[SearchPath]
+Count=5
+Value0=I:\-=PROGRAMAVIMAS=-\C PROGRAMOS\ZELIO_OUTPUTAI -=C=-\
+Value1=C:\Program Files\Mikroelektronika\mikroC\Defs\
+Value2=C:\Program Files\Mikroelektronika\mikroC\Uses\p16\
+Value3=C:\Documents and Settings\tomas\Desktop\Zelio_outputai\
+Value4=I:\-=PROGRAMAVIMAS=-\C PROGRAMOS\ZELIO_OUTPUTAI -=C=-\
+[IncludePath]
+Count=0

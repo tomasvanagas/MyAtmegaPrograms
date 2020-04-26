@@ -1,0 +1,55 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+BUTTON                                                            0160h        4
+LcdText                                                           0164h        4
+LcdTaskas                                                         0168h        4
+Timer7                                                            016Ch        1
+Timer8                                                            016Dh        1
+Timer9                                                            016Eh        1
+Timer10                                                           016Fh        2
+Timer11                                                           0171h        2
+Timer12                                                           0173h        2
+Timer14                                                           0175h        2
+Timer19                                                           0177h        2
+Timer20                                                           0179h        2
+Timer24                                                           017Bh        2
+LangoAdresas                                                      017Dh        1
+LanguTrigeris                                                     017Eh        1
+BATTERY_VOLTAGE                                                   017Fh        1
+BATTERY_VOLTAGE_ARCHIVE                                           0180h       10
+ItamposTrigeris1                                                  018Ah        1
+ItamposTrigeris2                                                  018Bh        1
+Timer29                                                           018Ch        2
+Timer16                                                           018Eh        2
+InteruptTimer                                                     0190h        2
+Timer1                                                            0192h        2
+Timer2                                                            0194h        2
+Timer26                                                           0196h        2
+Timer27                                                           0198h        2
+Timer28                                                           019Ah        2
+Timer21                                                           019Ch        2
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+BATTERY_FOULT                                                     0000h        1
+Timer4                                                            0001h        1
+Timer5                                                            0002h        1
+MAX_BATTERY_VOLTAGE                                               0003h        1
+MIN_BATTERY_VOLTAGE                                               0004h        1
+Timer17                                                           0005h        2
+Timer18                                                           0007h        2
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+OSC                                                               R5           1
+SKIP                                                              R4           1
+UPS_STATE                                                         R7           1
+OLD_UPS_STATE                                                     R6           1
+KRAUTI                                                            R9           1
+LOAD                                                              R8           1
+BEEPER_OFF                                                        R11          1
+RealTime                                                          R10          1
+Timer3                                                            R12,R13      2
