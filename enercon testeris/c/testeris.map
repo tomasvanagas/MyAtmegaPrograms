@@ -1,0 +1,32 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+sinusA                                                            0160h       60
+sinusB                                                            019Ch       60
+sinusC                                                            01D8h       60
+APCIOS_UZLAIKYMAS_IJUNGIANT                                       0214h        3
+DAZNIS                                                            0217h        2
+daznio_skaitiklis                                                 0219h        2
+sinus_OUTPUT                                                      021Bh      180
+STEP_UP_PLOTIS                                                    02CFh        1
+pos                                                               02D0h        1
+_base_y                                                           02D1h        4
+_lcd_x                                                            02D5h        1
+_lcd_y                                                            02D6h        1
+_lcd_maxx                                                         02D7h        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+FAST_ON                                                           R5           1
+SIN_CIKLAS                                                        R4           1
+START                                                             R7           1
+DALIKLIS                                                          R6           1
+DAZNIO_DALIKLIS                                                   R9           1
+UPDATE_LCD                                                        R8           1
+lcd_update_skaitiklis                                             R10,R11      2
+sek_skaitiklis                                                    R12,R13      2

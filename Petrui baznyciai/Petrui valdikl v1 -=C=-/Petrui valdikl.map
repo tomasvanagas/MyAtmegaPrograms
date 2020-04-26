@@ -1,0 +1,46 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+Address                                                           0260h        3
+MenuCreated                                                       0263h       10
+CODE_IsEntering                                                   026Dh        1
+CODE_SuccessXYZ                                                   026Eh        3
+CODE_FailedXYZ                                                    0271h        3
+CODE_TimeLeft                                                     0274h        1
+CODE_EnteringCode                                                 0275h        2
+CODE_ExecutingDigit                                               0277h        1
+InteruptTimer                                                     0278h        2
+MissTimer                                                         027Ah        2
+RefreshTimer                                                      027Ch        2
+Called_1Second                                                    027Eh        1
+BUTTON                                                            027Fh        5
+ButtonFilter                                                      0284h        5
+DUAL_BUTTON                                                       0289h        4
+DualButtonFilter                                                  028Dh        4
+_base_y                                                           0291h        4
+_lcd_x                                                            0295h        1
+_lcd_y                                                            0296h        1
+_lcd_maxx                                                         0297h        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+RealTimeYear                                                      0000h        2
+RealTimeMonth                                                     0002h        1
+RealTimeDay                                                       0003h        1
+RealTimeHour                                                      0004h        1
+RealTimeMinute                                                    0005h        1
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+RealTimeSecond                                                    R5           1
+RefreshLcd                                                        R4           1
+PAGRINDINIS_LANGAS                                                R7           1
+Call_1Second                                                      R6           1
+MenuRow                                                           R9           1
+MenuLowestRow                                                     R8           1
+MenuHighestRow                                                    R11          1
+MenuColumn                                                        R10          1
+MenuLowestColumn                                                  R13          1
+MenuHighestColumn                                                 R12          1

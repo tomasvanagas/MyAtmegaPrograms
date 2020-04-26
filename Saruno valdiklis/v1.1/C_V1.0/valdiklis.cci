@@ -1,0 +1,10 @@
+VERSION:3 SOURCE_TIMESTAMP:46EC9421
+NODE:I LEVEL:0 LINE:24 "C:\Program Files (x86)\CodeVisionAVR\inc\mega2561.h"
+NODE:I LEVEL:0 LINE:25 "C:\Program Files (x86)\CodeVisionAVR\inc\delay.h"
+NODE:I LEVEL:0 LINE:31 "C:\Program Files (x86)\CodeVisionAVR\inc\lcd.h"
+NODE:F LEVEL:0 LINE:33 "NumToIndex(unsigned char Num)"
+NODE:F LEVEL:0 LINE:48 "lcd_put_number(unsigned char Type,unsigned char Lenght,unsigned char IsSign,unsigned char NumbersAfterDot,unsigned long Number0,long Number1)"
+NODE:M LEVEL:0 LINE:134 "ADC_VREF_TYPE"
+NODE:F LEVEL:0 LINE:137 "read_adc(unsigned char adc_input)"
+NODE:F LEVEL:0 LINE:154 "main(void)"
+NODE:V LEVEL:0 LINE:419 "stand_by_pos_S0000003001 -> RAM:????"

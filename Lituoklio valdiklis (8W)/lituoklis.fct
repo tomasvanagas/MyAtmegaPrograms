@@ -1,0 +1,4 @@
+main DSTACK_USAGE:3 DSTACK_LEVEL:3 FILE:"lituoklis.c" LINE:421
+led_put_runing_text DSTACK_USAGE:10 DSTACK_LEVEL:13 FILE:"lituoklis.c" LINE:368
+strlenf DSTACK_USAGE:2 DSTACK_LEVEL:15 FILE:"C:\Program Files\CodeVisionAVR\lib\string.lib" LINE:1751
+adc_isr DSTACK_USAGE:5 DSTACK_LEVEL:20 FILE:"lituoklis.c" LINE:391

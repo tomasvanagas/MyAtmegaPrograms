@@ -1,0 +1,29 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+PHASE_PHASE                                                       0600h        1
+PHASE_UP_A                                                        0601h        1
+PHASE_UP_B                                                        0602h        1
+PHASE_UP_C                                                        0603h        1
+PHASE_DOWN_A                                                      0604h        1
+PHASE_DOWN_B                                                      0605h        1
+PHASE_DOWN_C                                                      0606h        1
+_base_y                                                           0607h        4
+_lcd_x                                                            060Bh        1
+_lcd_y                                                            060Ch        1
+_lcd_maxx                                                         060Dh        1
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+Count0                                                            R4,R5        2
+Count1                                                            R6,R7        2
+Count2                                                            R8,R9        2
+Count3                                                            R11          1
+PHASE                                                             R10          1
+ONE_SECOND                                                        R13          1
+STATED_FREQUENCY                                                  R12          1

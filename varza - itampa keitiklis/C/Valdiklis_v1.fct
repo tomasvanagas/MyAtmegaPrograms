@@ -1,0 +1,5 @@
+main DSTACK_USAGE:2 DSTACK_LEVEL:2 FILE:"Valdiklis_v1.c" LINE:153
+lcd_put_number DSTACK_USAGE:22 DSTACK_LEVEL:24 FILE:"Valdiklis_v1.c" LINE:39
+lcd_putchar DSTACK_USAGE:1 DSTACK_LEVEL:25 FILE:"C:\Program Files (x86)\CodeVisionAVR\lib\lcd.lib" LINE:178
+lcd_gotoxy DSTACK_USAGE:2 DSTACK_LEVEL:27 FILE:"C:\Program Files (x86)\CodeVisionAVR\lib\lcd.lib" LINE:158
+_lcd_write_data DSTACK_USAGE:1 DSTACK_LEVEL:28 FILE:"C:\Program Files (x86)\CodeVisionAVR\lib\lcd.lib" LINE:77

@@ -1,0 +1,575 @@
+/*****************************************************
+Project : 
+Version : 
+Date    : 2014.10.10
+
+Chip type               : ATmega2561
+*****************************************************/
+
+#include <mega2561.h>
+#include <delay.h>
+
+//#define PORTC.0 PHASE_UP1
+//#define PORTC.0 PHASE_UP2
+//#define PORTC.0 PHASE_UP3
+//#define PORTC.0 PHASE_DOWN1
+//#define PORTC.0 PHASE_DOWN2
+//#define PORTC.0 PHASE_DOWN3
+
+
+
+// Alphanumeric LCD Module functions
+#asm
+   .equ __lcd_port=0x12 ;PORTD
+#endasm
+#include <lcd.h>
+
+
+char NumToIndex(char Num){
+    if(Num==0){     return '0';}
+    else if(Num==1){return '1';}
+    else if(Num==2){return '2';}
+    else if(Num==3){return '3';}
+    else if(Num==4){return '4';}
+    else if(Num==5){return '5';}
+    else if(Num==6){return '6';}
+    else if(Num==7){return '7';}
+    else if(Num==8){return '8';}
+    else if(Num==9){return '9';}
+    else{           return '-';}
+return 0;
+}
+
+char lcd_put_number(char Type, char Lenght, char IsSign, 
+
+                    char NumbersAfterDot,
+
+                    unsigned long int Number0,
+                    signed long int Number1){
+    if(Lenght>0){                   
+    unsigned long int k = 1;
+    unsigned char i;               
+        for(i=0;i<Lenght-1;i++) k = k*10;
+
+        if(Type==0){
+        unsigned long int a;
+        unsigned char b;
+        a = Number0;
+         
+            if(IsSign==1){
+            lcd_putchar('+'); 
+            }
+
+            if(a<0){
+            a = a*(-1);
+            }
+            
+            if(k*10<a){
+            a = k*10 - 1;
+            }
+            
+            for(i=0;i<Lenght;i++){
+                if(NumbersAfterDot!=0){
+                    if(Lenght-NumbersAfterDot==i){
+                    lcd_putchar('.');
+                    }
+                }
+            b = a/k;                      
+            lcd_putchar( NumToIndex( b ) );                 
+            a = a - b*k;
+            k = k/10;
+            }
+        return 1; 
+        }
+
+        else if(Type==1){
+        signed long int a;
+        unsigned char b;
+        a = Number1;
+         
+            if(IsSign==1){
+                if(a>=0){
+                lcd_putchar('+');
+                }
+                else{
+                lcd_putchar('-');
+                } 
+            }
+
+            if(a<0){
+            a = a*(-1);
+            }
+            
+            if(k*10<a){
+            a = k*10 - 1;
+            }
+            
+            for(i=0;i<Lenght;i++){
+                if(NumbersAfterDot!=0){
+                    if(Lenght-NumbersAfterDot==i){
+                    lcd_putchar('.');
+                    }
+                }
+            b = a/k;                      
+            lcd_putchar( NumToIndex( b ) );                 
+            a = a - b*k;
+            k = k/10;
+            }
+        return 1; 
+        }
+    }        
+return 0;
+}
+
+
+unsigned int Count0, Count1, Count2;
+unsigned char Count3;
+unsigned char PHASE;
+unsigned char ONE_SECOND;
+
+
+// Timer 0 overflow interrupt service routine
+interrupt [TIM0_OVF] void timer0_ovf_isr(void){
+//Count0++;
+}
+
+
+
+
+
+unsigned char STATED_FREQUENCY, CYCLE_PHASE;
+unsigned int STATED_PWM, PWM_PHASE, PWM_LENGHT;
+
+
+unsigned char PHASE_PHASE;
+unsigned char PHASE_UP_A, PHASE_UP_B, PHASE_UP_C, PHASE_DOWN_A, PHASE_DOWN_B, PHASE_DOWN_C;
+
+
+interrupt [TIM1_OVF] void timer1_ovf_isr(void){
+
+Count0++;
+    if(Count0>=150){
+    Count0 = 0;
+    PHASE_PHASE++;
+        if(PHASE_PHASE>=12){
+        PHASE_PHASE = 0;
+        }
+
+
+
+        if(PHASE_PHASE==0){
+        PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        //PHASE_DOWN_B = 0;
+        //PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_B = 1;
+        PHASE_UP_C = 1; 
+        }
+        else if(PHASE_PHASE==1){
+        //PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        //PHASE_DOWN_B = 0;
+        //PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_UP_A = 1;
+        PHASE_DOWN_B = 1;
+        PHASE_UP_C = 1;
+        }
+        else if(PHASE_PHASE==2){
+        //PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        //PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_UP_A = 1;
+        PHASE_DOWN_B = 1;
+        }
+        else if(PHASE_PHASE==3){
+        //PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        //PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        //PHASE_DOWN_C = 0;
+
+        PHASE_UP_A = 1;
+        PHASE_DOWN_B = 1;
+        PHASE_DOWN_C = 1;
+        }
+        else if(PHASE_PHASE==4){
+        //PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        //PHASE_DOWN_C = 0;
+
+        PHASE_UP_A = 1;
+        PHASE_DOWN_C = 1;
+        }
+        else if(PHASE_PHASE==5){
+        //PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        //PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        //PHASE_DOWN_C = 0;
+
+        PHASE_UP_A = 1;
+        PHASE_UP_B = 1;
+        PHASE_DOWN_C = 1;
+        }
+        else if(PHASE_PHASE==6){
+        PHASE_UP_A = 0; 
+        PHASE_DOWN_A = 0;
+        //PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        //PHASE_DOWN_C = 0;
+
+        PHASE_UP_B = 1;
+        PHASE_DOWN_C = 1;
+        }
+        else if(PHASE_PHASE==7){
+        PHASE_UP_A = 0; 
+        //PHASE_DOWN_A = 0;
+        //PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        //PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_A = 1;
+        PHASE_UP_B = 1;
+        PHASE_DOWN_C = 1;
+        }
+        else if(PHASE_PHASE==8){
+        PHASE_UP_A = 0; 
+        //PHASE_DOWN_A = 0;
+        //PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_A = 1;
+        PHASE_UP_B = 1;
+        }
+        else if(PHASE_PHASE==9){
+        PHASE_UP_A = 0; 
+        //PHASE_DOWN_A = 0;
+        //PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        //PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_A = 1;
+        PHASE_UP_B = 1;
+        PHASE_UP_C = 1;
+        }
+        else if(PHASE_PHASE==10){
+        PHASE_UP_A = 0; 
+        //PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        PHASE_DOWN_B = 0;
+        //PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_A = 1;
+        PHASE_UP_C = 1;
+        }
+        else if(PHASE_PHASE==11){
+        PHASE_UP_A = 0; 
+        //PHASE_DOWN_A = 0;
+        PHASE_UP_B = 0; 
+        //PHASE_DOWN_B = 0;
+        //PHASE_UP_C = 0; 
+        PHASE_DOWN_C = 0;
+
+        PHASE_DOWN_A = 1;
+        PHASE_DOWN_B = 1;
+        PHASE_UP_C = 1;
+        } 
+
+
+        if(PHASE_DOWN_A==1){
+        PORTC.5 = 0;
+        PORTC.4 = 1;
+        }
+        else{
+        PORTC.4 = 0;
+        }
+        
+        if(PHASE_DOWN_B==1){
+        PORTC.3 = 0;
+        PORTC.2 = 1;
+        }
+        else{
+        PORTC.2 = 0;
+        }
+        
+        if(PHASE_DOWN_C==1){
+        PORTC.1 = 0;
+        PORTC.0 = 1;
+        }
+        else{
+        PORTC.0 = 0;
+        }
+    }
+
+
+
+Count1++;
+    if(Count1>=10){
+    Count1 = 0;
+    }
+    
+    if(Count1<=5){
+        if(PHASE_UP_A==1){
+        PORTC.5 = 1;
+        }
+        if(PHASE_UP_B==1){
+        PORTC.3 = 1;
+        }
+        if(PHASE_UP_C==1){
+        PORTC.1 = 1;
+        }
+    }
+    else{
+    PORTC.5 = 0;
+    PORTC.3 = 0;
+    PORTC.1 = 0;
+    }
+
+
+
+/*
+    if(PWM_PHASE>=PWM_LENGHT){
+    PWM_PHASE = 0;
+
+    CYCLE_PHASE++;
+        if(CYCLE_PHASE>12){
+        CYCLE_PHASE = 1;
+        }
+
+        if(CYCLE_PHASE==1){
+                        
+        }
+        else if(CYCLE_PHASE==2){
+                        
+        }
+        else if(CYCLE_PHASE==3){
+                        
+        }
+        else if(CYCLE_PHASE==4){
+                        
+        }
+        else if(CYCLE_PHASE==5){
+                        
+        }
+        else if(CYCLE_PHASE==6){
+                        
+        }
+        else if(CYCLE_PHASE==7){
+                        
+        }
+        else if(CYCLE_PHASE==8){
+                        
+        }
+        else if(CYCLE_PHASE==9){
+                        
+        }
+        else if(CYCLE_PHASE==10){
+                        
+        }
+        else if(CYCLE_PHASE==11){
+                        
+        }
+        else if(PHASE==12){
+                        
+        }
+    }
+*/
+
+    
+}
+
+
+interrupt [TIM2_OVF] void timer2_ovf_isr(void)
+{
+// Place your code here
+//Count2++;
+}
+
+
+
+void main(void){
+// Declare your local variables here
+
+// Input/Output Ports initialization
+// Port B initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+PORTB=0x00;
+DDRB=0x00;
+
+// Port C initialization
+// Func6=In Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out 
+// State6=T State5=0 State4=0 State3=0 State2=0 State1=0 State0=0 
+PORTC=0x00;
+DDRC=0x3F;
+
+// Port D initialization
+// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State7=T State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+PORTD=0x00;
+DDRD=0x00;
+
+// Timer/Counter 0 initialization
+// Clock source: System Clock
+// Clock value: Timer 0 Stopped
+//TCCR0=0x00;
+//TCNT0=0x00;
+
+// Timer/Counter 1 initialization
+// Clock source: System Clock
+// Clock value: 31.250 kHz
+// Mode: Fast PWM top=OCR1A
+// OC1A output: Discon.
+// OC1B output: Discon.
+// Noise Canceler: Off
+// Input Capture on Falling Edge
+// Timer1 Overflow Interrupt: On
+// Input Capture Interrupt: Off
+// Compare A Match Interrupt: Off
+// Compare B Match Interrupt: Off
+TCCR1A=0x03;
+TCCR1B=0x1C;
+TCNT1H=0x00;
+TCNT1L=0x00;
+ICR1H=0x00;
+ICR1L=0x00;
+OCR1AH=0x00;
+OCR1AL=0x00;
+OCR1BH=0x00;
+OCR1BL=0x00;
+
+// Timer/Counter 2 initialization
+// Clock source: System Clock
+// Clock value: Timer2 Stopped
+// Mode: Normal top=FFh
+// OC2 output: Disconnected
+//ASSR=0x00;
+//TCCR2=0x00;
+//TCNT2=0x00;
+//OCR2=0x00;
+
+// External Interrupt(s) initialization
+// INT0: Off
+// INT1: Off
+MCUCR=0x00;
+
+// Timer(s)/Counter(s) Interrupt(s) initialization
+//TIMSK=0x04;
+
+// Analog Comparator initialization
+// Analog Comparator: Off
+// Analog Comparator Input Capture by Timer/Counter 1: Off
+ACSR=0x80;
+//SFIOR=0x00;
+
+// LCD module initialization
+lcd_init(20);
+
+// Global enable interrupts
+#asm("sei")
+//OCR1A = 100;
+
+    while(1){
+    unsigned int TIME;            
+       // if(ONE_SECOND==1){
+        
+        //ONE_SECOND = 0;  
+        /*
+        Phase++;
+            if(PHASE>12){
+            Phase = 1;
+            }
+
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            if(PHASE==1){
+                    
+            }
+            */
+
+        //lcd_clear();
+        //lcd_gotoxy(0,0);
+        //lcd_put_number(0,5,0,0,Count0,0);    
+        //Count0 = 0;
+
+        //lcd_gotoxy(0,1);
+        //lcd_put_number(0,5,0,0,Count2,0);
+        //Count2 = 0;
+
+        
+
+        //Count3++;
+        //lcd_gotoxy(0,2);
+        //lcd_put_number(0,7,0,0,Count3,0);
+
+        
+        // CPU USAGE ///////////////////////////////////////////////////////////////                
+        //Count3 = 0;
+        //lcd_gotoxy(0,3);
+        
+        //lcd_puts("CPU COUNTS: ");
+        //lcd_put_number(0,7,0,0,TIME,0);
+        //TIME = Count3;            
+        ////////////////////////////////////////////////////////////////////////////
+       // }
+     
+     
+     
+    
+    
+        //PORTC.0 = 0;// 250 ns
+    //delay_ms(1000);   
+    }
+}

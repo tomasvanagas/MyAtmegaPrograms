@@ -1,0 +1,18 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+LcdText                                                           0160h        4
+LcdTaskas                                                         0164h        4
+adc_data                                                          0168h        2
+input_index                                                       016Ah        1
+BUTTON                                                            016Bh        5
+ButtonFilter                                                      0170h        5
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+OSC                                                               R5           1
