@@ -1,0 +1,61 @@
+void zodis(){
+
+if((Ciklu_skaicius>=0)&&(Ciklu_skaicius<a)){
+if(OSC==0){
+SKAICIUS = 15;}
+if(OSC==2){
+SKAICIUS = 15;}
+if(OSC==4){
+SKAICIUS = 15;}
+if(OSC==6){
+SKAICIUS = 10;}}
+
+if((Ciklu_skaicius>=a)&&(Ciklu_skaicius<a*2)){
+if(OSC==0){
+SKAICIUS = 15;}
+if(OSC==2){
+SKAICIUS = 15;}
+if(OSC==4){
+SKAICIUS = 10;}
+if(OSC==6){
+SKAICIUS = 6;}}
+
+if((Ciklu_skaicius>=a*2)&&(Ciklu_skaicius<a*3)){
+if(OSC==0){
+SKAICIUS = 15;}
+if(OSC==2){
+SKAICIUS = 10;}
+if(OSC==4){
+SKAICIUS = 6;}
+if(OSC==6){
+SKAICIUS = 6;}}
+
+if((Ciklu_skaicius>=a*3)&&(Ciklu_skaicius<a*4)){
+if(OSC==0){
+SKAICIUS = 10;}
+if(OSC==2){
+SKAICIUS = 6;}
+if(OSC==4){
+SKAICIUS = 6;}
+if(OSC==6){
+SKAICIUS = 15;}}
+
+if((Ciklu_skaicius>=a*4)&&(Ciklu_skaicius<a*5)){
+if(OSC==0){
+SKAICIUS = 6;}
+if(OSC==2){
+SKAICIUS = 6;}
+if(OSC==4){
+SKAICIUS = 15;}
+if(OSC==6){
+SKAICIUS = 15;}}
+
+if((Ciklu_skaicius>=a*5)&&(Ciklu_skaicius<a*6)){
+if(OSC==0){
+SKAICIUS = 6;}
+if(OSC==2){
+SKAICIUS = 15;}
+if(OSC==4){
+SKAICIUS = 15;}
+if(OSC==6){
+SKAICIUS = 15;}}
