@@ -1,0 +1,9 @@
+[DEFAULT]
+BASEURL=http://jjackson.eng.ua.edu/courses/ece380/lectures/
+[InternetShortcut]
+URL=http://jjackson.eng.ua.edu/courses/ece380/lectures/
+IDList=
+IconFile=http://jjackson.eng.ua.edu/favicon.ico
+IconIndex=1
+[{000214A0-0000-0000-C000-000000000046}]
+Prop3=19,2

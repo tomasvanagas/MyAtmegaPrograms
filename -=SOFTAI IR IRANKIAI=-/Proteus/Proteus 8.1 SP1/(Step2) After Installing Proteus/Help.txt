@@ -1,0 +1,14 @@
+Copy "BIN" To Instalation Folder
+"C:\Program Files\Labcenter Electronics\Proteus 8 Professional"
+
+Copy "MODELS" To Instalation Folder
+C:\Documents and Settings\All Users\Application Data\Labcenter Electronics\Proteus 8 Professional
+
+or  C:\ProgramData\Labcenter Electronics\Proteus 8 Professional
+
+------------------------------------------------------------
+PerTic@n - SonSivri.to
+
+pertican2010@gmail.com
+
+Persian Undergrand Cracker
